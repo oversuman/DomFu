@@ -1,0 +1,4 @@
+# distutils / setuptools
+*.egg-info
+build/
+dist/

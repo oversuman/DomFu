@@ -1,0 +1,3 @@
+- Add MultiProcessing support
+- Add SubBrute Support
+- Add Nmap NSE based subdomain discovery
