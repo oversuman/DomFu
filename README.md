@@ -15,7 +15,7 @@
   <a href="https://github.com/TxSadhu/DomFu/blob/master/LICENSE.txt">
     <img src="https://img.shields.io/badge/License-GPLv3-orange.svg">
   </a> 
-  <a href="https://github.com/0xinfection/TIDoS-Framework/releases/tag/v1.0/">
+  <a href="https://github.com/TxSadhu/DomFu/releases/tag/v1.0.0/">
     <img src="https://img.shields.io/badge/Release-Stable-green.svg">
   </a>
 </p>
