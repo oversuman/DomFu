@@ -22,7 +22,7 @@
 
 ---
 
-A CLI app to find domains and subdomains of a given domain.
+A python module to find domains and subdomains of a given domain with a easy to use CLI.
 
 ## Installation
 
@@ -57,7 +57,20 @@ domfu tropyl.com tropyl.txt
 **Using it as a python module:**
 
 ```python
-import domfu
+import DomFu
+
+# Using all sources:
+DomFu.search("tropyl.com")
+
+# Using individual sources to find subdomain:
+dom = "tropyl.com"
+
+DomFu.fetchCrtSh(dom)
+DomFu.fetchBufferOverRun(dom)
+DomFu.fetchHackerTarget(dom)
+DomFu.fetchThreatCrowd(dom)
+DomFu.fetchVirusTotal(dom)
+
 ```
 
 ## Contributing
