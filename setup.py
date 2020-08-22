@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='DomFu',
-    version='1.0',
+    version='1.0 beta',
     author='Suman Basuli',
     author_email='thinisadhu@gmail.com',
     packages=find_packages(),
@@ -11,6 +11,7 @@ setup(
     license='LICENSE.txt',
     description='A CLI app to find domains and subdomains of a given domain',
     long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
     install_requires=[
         "fire",
         "yaspin",
