@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import socket
 import validators
 import requests
 
@@ -85,18 +86,46 @@ def fetchVirusTotal(domain):
 
 
 def search(domain):
+    try:
+        socket.gethostbyname(domain)
+        dom_valid = True
+    except socket.gaierror:
+        dom_valid = False
+
     subdomain = []
 
-    if validators.domain(domain):
-        subdomain.extend(fetchCrtSh(domain))
-        subdomain.extend(fetchBufferOverRun(domain))
-        subdomain.extend(fetchHackerTarget(domain))
-        subdomain.extend(fetchThreatCrowd(domain))
-        subdomain.extend(fetchVirusTotal(domain))
+    if validators.domain(domain) and dom_valid:
+        try:
+            subdomain.extend(fetchCrtSh(domain))
+        except:
+            pass
 
-        subdomain = sorted(set(subdomain))
+        try:
+            subdomain.extend(fetchBufferOverRun(domain))
+        except:
+            pass
+
+        try:
+            subdomain.extend(fetchHackerTarget(domain))
+        except:
+            pass
+
+        try:
+            subdomain.extend(fetchThreatCrowd(domain))
+        except:
+            pass
+
+        try:
+            subdomain.extend(fetchVirusTotal(domain))
+        except:
+            pass
+
+        try:
+            subdomain = sorted(set(subdomain))
+        except:
+            pass
 
         return(subdomain)
 
     else:
-        return(0)
+        return("Error: Enter a Valid Domain name")

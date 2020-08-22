@@ -4,6 +4,7 @@ import fire
 import time
 import os
 import validators
+import socket
 import requests
 from yaspin import yaspin, Spinner
 
@@ -102,32 +103,57 @@ by txsadhu⠀⠀⠀
 
 
 def search(domain, output):
-    sp = Spinner(["😸", "😹", "😺", "😻", "😼", "😽", "😾", "😿", "🙀"], 200)
-
     version()
+    sp = Spinner(["[\]", "[|]", "[/]", "[-]"], 200)
+
+    with yaspin(sp, text="Checking if the domain is online or valid"):
+        try:
+            socket.gethostbyname(domain)
+            dom_valid = True
+            yaspin().ok("[Valid!] Looks like your domain is valid and online")
+        except socket.gaierror:
+            dom_valid = False
+            yaspin().fail(
+                "[Invalid!] Looks like your domain is offline or invalid")
+
     subdomain = []
-    if validators.domain(domain):
+    if validators.domain(domain) and dom_valid:
         timenow_start = time.perf_counter()
 
         with yaspin(sp, text="Looking in SSL Certs"):
-            subdomain.extend(fetchCrtSh(domain))
-            yaspin().ok("✅ Looking in SSL Certs")
+            try:
+                subdomain.extend(fetchCrtSh(domain))
+                yaspin().ok("[Done!] Looking in SSL Certs")
+            except:
+                pass
 
         with yaspin(sp, text="Calling BufferOverRun"):
-            subdomain.extend(fetchBufferOverRun(domain))
-            yaspin().ok("✅ Calling BufferOverRun")
+            try:
+                subdomain.extend(fetchBufferOverRun(domain))
+                yaspin().ok("[Done!] Calling BufferOverRun")
+            except:
+                pass
 
         with yaspin(sp, text="Looking in HackerTarget"):
-            subdomain.extend(fetchHackerTarget(domain))
-            yaspin().ok("✅ Looking in HackerTarget")
+            try:
+                subdomain.extend(fetchHackerTarget(domain))
+                yaspin().ok("[Done!] Looking in HackerTarget")
+            except:
+                pass
 
         with yaspin(sp, text="Looking in ThreatCrowd"):
-            subdomain.extend(fetchThreatCrowd(domain))
-            yaspin().ok("✅ Looking in ThreatCrowd")
+            try:
+                subdomain.extend(fetchThreatCrowd(domain))
+                yaspin().ok("[Done!] Looking in ThreatCrowd")
+            except:
+                pass
 
         with yaspin(sp, text="Looking in VirusTotal"):
-            subdomain.extend(fetchVirusTotal(domain))
-            yaspin().ok("✅ Looking in VirusTotal")
+            try:
+                subdomain.extend(fetchVirusTotal(domain))
+                yaspin().ok("[Done!] Looking in VirusTotal")
+            except:
+                pass
 
         subdomain = sorted(set(subdomain))
 
@@ -144,7 +170,7 @@ def search(domain, output):
         print("\n")
 
     else:
-        print("🤬 Enter a valid domain")
+        print("Error (TPYL_INVDOM): Enter a valid domain")
         print("\n")
 
 
