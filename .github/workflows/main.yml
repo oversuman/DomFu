@@ -14,16 +14,14 @@ jobs:
   test_publish:
     runs-on: ubuntu-latest
     steps:
-      - name: creating dist file
-        uses: actions/checkout@v2
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
         with:
-          python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
-          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
-        run: python install python-pip && pip install wheel && python setup.py sdist bdist_wheel
-        
-      - name: Testing your Package
-        uses: pypa/gh-action-pypi-publish@master
+          python-version: "3.x" # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          architecture: "x64" # optional x64 or x86. Defaults to x64 if not specified
+      - run: python install python-pip && pip install wheel && python setup.py sdist bdist_wheel
+
+      - uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_PASSWORD }}
