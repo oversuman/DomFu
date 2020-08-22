@@ -1,18 +1,31 @@
 name: Publish to Public PyPi
 
 on:
+  pull_request:
+    branches:
+      - master
+      - dev
   push:
     branches:
       - master
       - dev
 
 jobs:
+  test_publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Testing your Package
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_PASSWORD }}
+          repository_url: https://test.pypi.org/project/DomFu/
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Publish package to TestPyPI
+      - name: Publish to PyPi
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.PYPI_PASSWORD }}
-          repository_url: dist/*
