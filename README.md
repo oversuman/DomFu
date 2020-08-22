@@ -1,7 +1,8 @@
 <p align="center">
-
 <a href="https://github.com/txsadhu/domfu"><img src="https://i.imgur.com/xYoBNoF.png" alt="DomFu logo"></a>
+</p>
 
+<p align="center">
   <a href="https://www.python.org/download/releases/3.7">
     <img src="https://img.shields.io/badge/Python-3.7-green.svg">
   </a>
