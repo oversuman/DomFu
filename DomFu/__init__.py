@@ -130,13 +130,13 @@ def fetchVirusTotal(domain):
     return(subdomain)
 
 
-def search(domain):
+def subdomain(domain):
     '''
     string -> list
 
     This function queries all API and tools to look for subdomain(s) of your domain name.
 
-    Input  : DomFu.search("tropyl.com")
+    Input  : DomFu.subdomain("tropyl.com")
     Output : ['tropyl.com', 'www.tropyl.com']
 
     '''
