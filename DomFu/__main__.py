@@ -79,32 +79,32 @@ def subdomain(domain, output):
                 pass
 
         subdomain = sorted(set(subdomain))
-        print('\n')
+        print('')
         print('-'*60)
-        print('\n')
+        print('')
 
         if output != None:
             print('\n'.join(subdomain))
-            print("\n")
+            print("")
             print('-'*60)
             fileoutput = open('%s' % output, 'w')
             towrite = '\n'.join(subdomain)
             fileoutput.write(towrite)
             fileoutput.close()
             timenow_end = time.perf_counter()
-            print("\n")
+            print("")
             print(
                 f"All Done! in {round(timenow_end-timenow_start, 2)} second(s). Check your output file")
-            print("\n")
+            print("")
         else:
             print('\n'.join(subdomain))
-            print("\n")
+            print("")
             print('-'*60)
             timenow_end = time.perf_counter()
-            print("\n")
+            print("")
             print(
                 f"All Done! in {round(timenow_end-timenow_start, 2)} second(s).")
-            print("\n")
+            print("")
 
     else:
         print("Error (TPYL_DomFu_INVDOM): Enter a valid domain")

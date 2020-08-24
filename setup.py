@@ -20,6 +20,6 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        domfu=DomFu.__main__:main
+        domfu=DomFu.__main__:subdomain
     ''',
 )
