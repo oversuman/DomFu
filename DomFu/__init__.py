@@ -11,8 +11,7 @@ def fetchCrtSh(domain):
     This function queries crt.sh to look for domain names in SSL cert issued by the organization.
 
     Input  : fetchCrtSh("tropyl.com")
-    Output : ['*.newsletter.tropyl.com\nnewsletter.tropyl.com', ... 'www.tropyl.com\nwww.www.tropyl.com']
-
+    Output : ['tropyl.com', 'www.tropyl.com']
     '''
     subdomains = []
 
