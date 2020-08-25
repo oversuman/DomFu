@@ -29,7 +29,24 @@ A python module to find domains and subdomains of a given domain with a easy to 
 **Using pip:**
 
 ```bash
-pip install DomFu
+$ sudo apt-get update -y
+$ pip install DomFu
+```
+
+**Manual Installation:**
+
+```bash
+$ git clone https://github.com/TxSadhu/DomFu.git
+$ cd DomFu
+$ python setup.py install
+```
+
+## Update
+
+**Using pip:**
+
+```bash
+pip install --upgrade DomFu
 ```
 
 **Manual Installation:**
@@ -45,34 +62,30 @@ $ python setup.py install
 **Using as Standalone CLI app:**
 
 ```bash
-domfu --domain tropyl.com --output tropyl.txt
-```
-
-or
-
-```bash
-domfu tropyl.com tropyl.txt
+domfu --help
 ```
 
 **Using it as a python module:**
 
 ```python
-import DomFu
+import DomFu as df
 
-# Using all sources:
-DomFu.search("tropyl.com")
-
-# Using individual sources to find subdomain:
 dom = "tropyl.com"
 
-DomFu.fetchCrtSh(dom)
-DomFu.fetchBufferOverRun(dom)
-DomFu.fetchHackerTarget(dom)
-DomFu.fetchThreatCrowd(dom)
-DomFu.fetchVirusTotal(dom)
+# Using all sources:
+df.subdomain(dom)
+
+# Using individual sources to find subdomain:
+df.fetchCrtSh(dom)
+df.fetchBufferOverRun(dom)
+df.fetchHackerTarget(dom)
+df.fetchThreatCrowd(dom)
+df.fetchVirusTotal(dom)
 
 ```
 
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Please make sure to update tests as appropriate.
+
+**Note: Do not ever make a pull request to the master branch. Switch to the dev branch to look for active development going on the tool.**

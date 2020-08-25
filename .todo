@@ -1,3 +1,8 @@
 - Add MultiProcessing support
 - Add SubBrute Support
 - Add Nmap NSE based subdomain discovery
+
+- Get DNS records ('domfu dns -d DOMAIN -o OUTPUT')
+- Check if a domain is infected ('domfu virus -d DOMAIN')
+- Get Whois records ('domfu whois -d DOMAIN -o OUTPUT')
+- store apis in DB ('domfu api --virustotal 'API_KEY')
