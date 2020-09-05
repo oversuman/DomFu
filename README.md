@@ -30,7 +30,7 @@ A python module to find domains and subdomains of a given domain with a easy to 
 
 ```bash
 $ sudo apt-get update -y
-$ pip install DomFu
+$ sudo pip install DomFu
 ```
 
 **Manual Installation:**
@@ -38,7 +38,7 @@ $ pip install DomFu
 ```bash
 $ git clone https://github.com/TxSadhu/DomFu.git
 $ cd DomFu
-$ python setup.py install
+$ sudo python setup.py install
 ```
 
 ## Update
@@ -47,7 +47,7 @@ $ python setup.py install
 
 ```bash
 $ sudo apt-get update -y
-$ pip install DomFu==latest
+$ sudo pip install DomFu==1.0.3
 ```
 
 **Manual Installation:**
@@ -55,7 +55,7 @@ $ pip install DomFu==latest
 ```
 $ git clone https://github.com/TxSadhu/DomFu.git
 $ cd DomFu
-$ python setup.py install
+$ sudo python setup.py install
 ```
 
 ## Usage
