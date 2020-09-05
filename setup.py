@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='DomFu',
-    version='1.0.2',
+    version='1.0.3',
     author='Suman Basuli',
     author_email='thinisadhu@gmail.com',
     packages=find_packages(),
@@ -20,6 +20,6 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        domfu=DomFu.__main__:main
+        domfu=DomFu.__main__:subdomain
     ''',
 )

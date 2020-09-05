@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import fire
+import click
 import time
 import validators
 import socket
@@ -9,19 +9,22 @@ from DomFu import fetchCrtSh, fetchBufferOverRun, fetchHackerTarget, fetchThreat
 
 
 def version():
-    print('''
+    return('''
 ⣤⣤⣤⡤⣤⣤⣀⠀⠀⠀⠀⣀⢤⣴⣴⣤⣀⠀⠀⣤⣤⣤⡄⢀⣤⣤⣀⠀⢀⣤⣤⣀⠀⢠⣤⣤⣤⠤⣤⣤⣤⢠⣤⣤⣤⠀⢠⣤⣤⣤⠀⠀⠀⠀
 ⣿⣿⣿⡇⠀⣿⣿⣿⡀⢠⣿⠀⢀⣿⣿⣿⣿⣷⠀⣿⣿⣿⡇⣿⣿⣿⣿⣆⣿⣿⣿⣿⣆⢸⣿⣿⡏⢾⣿⣿⣿⢸⣿⣿⣿⠀⢸⣿⣿⣿⠀⠀⠀⠀
 ⣿⣿⣿⡇⢀⣿⣿⣿⣷⣿⣿⣄⠀⠉⢻⣿⣿⣿⡇⣿⣿⣿⡟⠈⣿⣿⣿⣟⠈⣿⣿⣿⣇⢸⣿⣿⣿⣤⣭⣩⠉⢸⣿⣿⣿⠀⣸⣿⣿⣿⠀⠀⠀⠀
 ⣿⣿⣿⢿⣿⣿⣿⣿⠃⠹⣿⣿⣿⣿⣿⣿⣿⣿⠀⣿⣿⣿⡇⠀⣿⣿⣿⣇⠀⣿⣿⣿⡇⢸⣿⣿⣿⠀⠀⠀⠀⢸⣿⣿⣿⣿⢹⣿⣿⣿⠀⠀⠀⠀⠀
 ⠻⠻⠛⠸⠻⠻⠛⠁⠀⠀⠈⠛⠻⠿⠿⠛⠉⠀⠀⠻⠻⠻⠃⠀⠻⠻⠻⠓⠀⠻⠻⠻⠃⠸⠻⠻⠻⠀⠀⠀⠀⠀⠛⠻⠻⠋⠸⠻⠻⠻⠀⠀v1.0
 by txsadhu⠀⠀⠀
----------------------------------------------------------⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+------------------------------------------------------------⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
     ''')
 
 
-def search(domain, output):
-    version()
+@click.command()
+@click.option('--domain', '-d', prompt="Enter a domain name", help='Enter your domain name')
+@click.option('--output', '-o', help='Specify the output to store your subdomains')
+def subdomain(domain, output):
+    click.echo(version())
     sp = Spinner(["[\]", "[|]", "[/]", "[-]"], 200)
 
     with yaspin(sp, text="Checking if the domain is online or valid"):
@@ -29,10 +32,12 @@ def search(domain, output):
             socket.gethostbyname(domain)
             dom_valid = True
             yaspin().ok("[Valid!] Looks like your domain is valid and online")
+            print('\n')
         except socket.gaierror:
             dom_valid = False
             yaspin().fail(
                 "[Invalid!] Looks like your domain is offline or invalid")
+            print('\n')
 
     subdomain = []
     if validators.domain(domain) and dom_valid:
@@ -74,27 +79,39 @@ def search(domain, output):
                 pass
 
         subdomain = sorted(set(subdomain))
+        print('')
+        print('-'*60)
+        print('')
 
-        fileoutput = open('%s' % output, 'w')
-        towrite = '\n'.join(subdomain)
-        fileoutput.write(towrite)
-        fileoutput.close()
-
-        timenow_end = time.perf_counter()
-
-        print("\n")
-        print(
-            f"All Done! in {round(timenow_end-timenow_start, 2)} second(s). Check your output file")
-        print("\n")
+        if output != None:
+            print('\n'.join(subdomain))
+            print("")
+            print('-'*60)
+            fileoutput = open('%s' % output, 'w')
+            towrite = '\n'.join(subdomain)
+            fileoutput.write(towrite)
+            fileoutput.close()
+            timenow_end = time.perf_counter()
+            print("")
+            print(
+                f"All Done! in {round(timenow_end-timenow_start, 2)} second(s). Check your output file")
+            print("")
+        else:
+            print('\n'.join(subdomain))
+            print("")
+            print('-'*60)
+            timenow_end = time.perf_counter()
+            print("")
+            print(
+                f"All Done! in {round(timenow_end-timenow_start, 2)} second(s).")
+            print("")
 
     else:
         print("Error (TPYL_DomFu_INVDOM): Enter a valid domain")
         print("\n")
 
-
-def main():
-    fire.Fire(search)
+    print('-'*60)
 
 
 if __name__ == '__main__':
-    main()
+    subdomain()
