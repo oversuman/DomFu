@@ -46,7 +46,7 @@ $ python setup.py install
 **Using pip:**
 
 ```bash
-pip install --upgrade DomFu
+pip install DomFu==latest
 ```
 
 **Manual Installation:**
