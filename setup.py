@@ -17,6 +17,8 @@ setup(
         "yaspin",
         "requests",
         "validators",
+        "socket",
+        "time",
     ],
     entry_points='''
         [console_scripts]
