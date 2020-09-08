@@ -3,11 +3,11 @@
 </p>
 
 <p align="center">
-  <a href="https://www.python.org/download/releases/3.7">
-    <img src="https://img.shields.io/badge/Python-3.7-green.svg">
+  <a href="https://www.python.org/download/releases/3.8">
+    <img src="https://img.shields.io/badge/Python-3.8-green.svg">
   </a>
   <a href="https://github.com/txsadhu/domfu/releases">
-    <img src="https://img.shields.io/badge/DomFu-v1.0-violet.svg">
+    <img src="https://img.shields.io/badge/DomFu-v1.1-violet.svg">
   </a>
   <a href="https://github.com/txsadhu/domfu/">
       <img src="https://img.shields.io/badge/Tested%20on-Linux-yellow.svg">
@@ -15,7 +15,7 @@
   <a href="https://github.com/TxSadhu/DomFu/blob/master/LICENSE.txt">
     <img src="https://img.shields.io/badge/License-GPLv3-orange.svg">
   </a> 
-  <a href="https://github.com/TxSadhu/DomFu/releases/tag/v1.0.1/">
+  <a href="https://github.com/TxSadhu/DomFu/releases/tag/v1.1.0/">
     <img src="https://img.shields.io/badge/Release-Stable-green.svg">
   </a>
 </p>
@@ -47,7 +47,7 @@ $ sudo python setup.py install
 
 ```bash
 $ sudo apt-get update -y
-$ sudo pip install DomFu==1.0.3
+$ sudo pip install DomFu==1.1.0
 ```
 
 **Manual Installation:**

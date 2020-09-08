@@ -2,8 +2,9 @@
 
 import click
 import time
-import validators
 import socket
+from threading import *
+import queue
 from yaspin import yaspin, Spinner
 from DomFu import fetchCrtSh, fetchBufferOverRun, fetchHackerTarget, fetchThreatCrowd, fetchVirusTotal
 
@@ -14,7 +15,7 @@ def version():
 ⣿⣿⣿⡇⠀⣿⣿⣿⡀⢠⣿⠀⢀⣿⣿⣿⣿⣷⠀⣿⣿⣿⡇⣿⣿⣿⣿⣆⣿⣿⣿⣿⣆⢸⣿⣿⡏⢾⣿⣿⣿⢸⣿⣿⣿⠀⢸⣿⣿⣿⠀⠀⠀⠀
 ⣿⣿⣿⡇⢀⣿⣿⣿⣷⣿⣿⣄⠀⠉⢻⣿⣿⣿⡇⣿⣿⣿⡟⠈⣿⣿⣿⣟⠈⣿⣿⣿⣇⢸⣿⣿⣿⣤⣭⣩⠉⢸⣿⣿⣿⠀⣸⣿⣿⣿⠀⠀⠀⠀
 ⣿⣿⣿⢿⣿⣿⣿⣿⠃⠹⣿⣿⣿⣿⣿⣿⣿⣿⠀⣿⣿⣿⡇⠀⣿⣿⣿⣇⠀⣿⣿⣿⡇⢸⣿⣿⣿⠀⠀⠀⠀⢸⣿⣿⣿⣿⢹⣿⣿⣿⠀⠀⠀⠀⠀
-⠻⠻⠛⠸⠻⠻⠛⠁⠀⠀⠈⠛⠻⠿⠿⠛⠉⠀⠀⠻⠻⠻⠃⠀⠻⠻⠻⠓⠀⠻⠻⠻⠃⠸⠻⠻⠻⠀⠀⠀⠀⠀⠛⠻⠻⠋⠸⠻⠻⠻⠀⠀v1.0
+⠻⠻⠛⠸⠻⠻⠛⠁⠀⠀⠈⠛⠻⠿⠿⠛⠉⠀⠀⠻⠻⠻⠃⠀⠻⠻⠻⠓⠀⠻⠻⠻⠃⠸⠻⠻⠻⠀⠀⠀⠀⠀⠛⠻⠻⠋⠸⠻⠻⠻⠀⠀v1.1
 by txsadhu⠀⠀⠀
 ------------------------------------------------------------⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
     ''')
@@ -32,52 +33,88 @@ def subdomain(domain, output):
             socket.gethostbyname(domain)
             dom_valid = True
             yaspin().ok("[Valid!] Looks like your domain is valid and online")
-            print('\n')
         except socket.gaierror:
             dom_valid = False
             yaspin().fail(
                 "[Invalid!] Looks like your domain is offline or invalid")
-            print('\n')
 
     subdomain = []
-    if validators.domain(domain) and dom_valid:
+
+    if dom_valid:
         timenow_start = time.perf_counter()
 
-        with yaspin(sp, text="Looking in SSL Certs"):
+        with yaspin(sp, text="Asking ours spies about your subdomains"):
+
+            que1 = queue.Queue()
+            que2 = queue.Queue()
+            que3 = queue.Queue()
+            que4 = queue.Queue()
+            que5 = queue.Queue()
+
+            crt_thread = Thread(target=lambda q, arg1: q.put(
+                fetchCrtSh(arg1)), args=(que1, domain))
+
+            bufferoverrun_thread = Thread(target=lambda q, arg2: q.put(
+                fetchBufferOverRun(arg2)), args=(que2, domain))
+
+            hackertarget_thread = Thread(target=lambda q, arg3: q.put(
+                fetchHackerTarget(arg3)), args=(que3, domain))
+
+            threatcrowd_thread = Thread(target=lambda q, arg4: q.put(
+                fetchThreatCrowd(arg4)), args=(que4, domain))
+
+            vt_thread = Thread(target=lambda q, arg5: q.put(
+                fetchVirusTotal(arg5)), args=(que5, domain))
+
+            crt_thread.start()
+            bufferoverrun_thread.start()
+            hackertarget_thread.start()
+            threatcrowd_thread.start()
+            vt_thread.start()
+
+            crt_thread.join()
+            bufferoverrun_thread.join()
+            hackertarget_thread.join()
+            threatcrowd_thread.join()
+            vt_thread.join()
+
+            rcrt_thread = que1.get()
+            rbufferoverrun_thread = que2.get()
+            rhackertarget_thread = que3.get()
+            rthreatcrowd_thread = que4.get()
+            rvt_thread = que5.get()
+
+            yaspin().ok("[Done!] Asking ours spies about your subdomains")
+
+        with yaspin(sp, text="Processing the data recieved"):
             try:
-                subdomain.extend(fetchCrtSh(domain))
-                yaspin().ok("[Done!] Looking in SSL Certs")
+                subdomain.extend(rcrt_thread)
             except:
                 pass
 
-        with yaspin(sp, text="Calling BufferOverRun"):
             try:
-                subdomain.extend(fetchBufferOverRun(domain))
-                yaspin().ok("[Done!] Calling BufferOverRun")
+                subdomain.extend(rbufferoverrun_thread)
             except:
                 pass
 
-        with yaspin(sp, text="Looking in HackerTarget"):
             try:
-                subdomain.extend(fetchHackerTarget(domain))
-                yaspin().ok("[Done!] Looking in HackerTarget")
+                subdomain.extend(rhackertarget_thread)
             except:
                 pass
 
-        with yaspin(sp, text="Looking in ThreatCrowd"):
             try:
-                subdomain.extend(fetchThreatCrowd(domain))
-                yaspin().ok("[Done!] Looking in ThreatCrowd")
+                subdomain.extend(rthreatcrowd_thread)
             except:
                 pass
 
-        with yaspin(sp, text="Looking in VirusTotal"):
             try:
-                subdomain.extend(fetchVirusTotal(domain))
-                yaspin().ok("[Done!] Looking in VirusTotal")
+                subdomain.extend(rvt_thread)
             except:
                 pass
 
+            yaspin().ok("[Done!] Processing the data recieved")
+
+        timenow_end = time.perf_counter()
         subdomain = sorted(set(subdomain))
         print('')
         print('-'*60)
@@ -91,7 +128,6 @@ def subdomain(domain, output):
             towrite = '\n'.join(subdomain)
             fileoutput.write(towrite)
             fileoutput.close()
-            timenow_end = time.perf_counter()
             print("")
             print(
                 f"All Done! in {round(timenow_end-timenow_start, 2)} second(s). Check your output file")
@@ -100,7 +136,6 @@ def subdomain(domain, output):
             print('\n'.join(subdomain))
             print("")
             print('-'*60)
-            timenow_end = time.perf_counter()
             print("")
             print(
                 f"All Done! in {round(timenow_end-timenow_start, 2)} second(s).")

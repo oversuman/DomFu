@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='DomFu',
-    version='1.0.4',
+    version='1.1.0',
     author='Suman Basuli',
     author_email='thinisadhu@gmail.com',
     packages=find_packages(),
@@ -16,9 +16,6 @@ setup(
         "click",
         "yaspin",
         "requests",
-        "validators",
-        "socket",
-        "time",
     ],
     entry_points='''
         [console_scripts]
