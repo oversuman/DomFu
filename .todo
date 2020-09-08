@@ -1,3 +1,4 @@
+- Add DNS query support
 - Add Wordlist Support
 - Add Nmap NSE based subdomain discovery
 - Only output active domains
