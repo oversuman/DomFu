@@ -6,7 +6,7 @@ import socket
 from threading import *
 import queue
 from yaspin import yaspin, Spinner
-from DomFu import fetchCrtSh, fetchBufferOverRun, fetchHackerTarget, fetchThreatCrowd, fetchVirusTotal
+from DomFu import fetchCrtSh, fetchBufferOverRun, fetchHackerTarget, fetchThreatCrowd, fetchVirusTotal, Probe
 
 
 def version():
@@ -24,7 +24,8 @@ by txsadhu⠀⠀⠀
 @click.command()
 @click.option('--domain', '-d', prompt="Enter a domain name", help='Enter your domain name')
 @click.option('--output', '-o', help='Specify the output to store your subdomains')
-def subdomain(domain, output):
+@click.option('--probe', '-p', default=False, help='Passes the domain name to a Prober to check if it is valid or online')
+def subdomain(domain, output, probe):
     click.echo(version())
     sp = Spinner(["[\]", "[|]", "[/]", "[-]"], 200)
 
@@ -113,6 +114,11 @@ def subdomain(domain, output):
                 pass
 
             yaspin().ok("[Done!] Processing the data recieved")
+
+        if probe:
+            with yaspin(sp, text="Validating your Domains on our Lab"):
+                subdomain = Probe(subdomain)
+                yaspin().ok("[Done!] Validating your Domains on our Lab")
 
         timenow_end = time.perf_counter()
         subdomain = sorted(set(subdomain))

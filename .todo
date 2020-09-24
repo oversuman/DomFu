@@ -1,5 +1,5 @@
-- validate the domains returned (something like httprobe)
 - Add DNS query support
-- Add Wordlist Support
-- Add Nmap NSE based subdomain discovery
-- Only output active domains
+    - validate the domains returned (something like httprobe / httpx)
+- Add Wordlist Support (active scan)
+- Add Nmap NSE based subdomain discovery (active scan)
+- Only output active domains checked through the probe.
