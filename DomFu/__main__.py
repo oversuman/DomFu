@@ -22,9 +22,9 @@ by txsadhu⠀⠀⠀
 
 
 @click.command()
-@click.option('--domain', '-d', prompt="Enter a domain name", help='Enter your domain name')
-@click.option('--output', '-o', help='Specify the output to store your subdomains')
-@click.option('--probe', '-p', default=False, help='Passes the domain name to a Prober to check if it is valid or online (-p=True)')
+@click.option('--domain', '-d', prompt="Enter a domain name", help='Enter your domain name. (USAGE: --domain=domain.tld)')
+@click.option('--output', '-o', help='Stores the output in a file. (USAGE: --output=domain.tld)',)
+@click.option('--probe', '-p', default=False, help='Validates the output domains. (USAGE: --probe=True)')
 def subdomain(domain, output, probe):
     click.echo(version())
     sp = Spinner(["[\]", "[|]", "[/]", "[-]"], 200)
