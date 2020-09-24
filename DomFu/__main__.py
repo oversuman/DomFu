@@ -24,7 +24,7 @@ by txsadhu⠀⠀⠀
 @click.command()
 @click.option('--domain', '-d', prompt="Enter a domain name", help='Enter your domain name')
 @click.option('--output', '-o', help='Specify the output to store your subdomains')
-@click.option('--probe', '-p', default=False, help='Passes the domain name to a Prober to check if it is valid or online')
+@click.option('--probe', '-p', default=False, help='Passes the domain name to a Prober to check if it is valid or online (-p=True)')
 def subdomain(domain, output, probe):
     click.echo(version())
     sp = Spinner(["[\]", "[|]", "[/]", "[-]"], 200)

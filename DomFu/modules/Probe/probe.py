@@ -1,17 +1,23 @@
 #!/usr/bin/env python3
 import requests
 import socket
+from threading import *
+
+global subdomain
+subdomain = []
 
 
 def Probe(subdomainList):
-    subdomain = []
+    jobs = []
     for domain in subdomainList:
-        try:
-            ret = probe_test(domain)
-            if ret is not None:
-                subdomain.append(ret)
-        except:
-            pass
+        thread = Thread(target=probe_test, args=(domain,))
+        jobs.append(thread)
+
+    for job in jobs:
+        job.start()
+
+    for job in jobs:
+        job.join()
 
     return(subdomain)
 
@@ -23,22 +29,28 @@ def probe_test(domain):
     except:
         dom_valid = False
 
-    if dom_valid:
-        # Http ----->
-        http_url = 'http://' + '{d}'.format(d=domain)
-        http_res = requests.get(http_url, timeout=5)
+    try:
+        if dom_valid:
+            # Http ----->
+            http_url = 'http://' + '{d}'.format(d=domain)
+            http_res = requests.get(http_url, timeout=5)
 
-        if http_res.status_code == 200 or http_res.status_code == 301 or http_res.status_code == 302:
-            return(domain)
+            if http_res.status_code == 200 or http_res.status_code == 301 or http_res.status_code == 302:
+                subdomain.append(domain)
+                return(None)
 
-        # Https ---->
-        https_url = 'https://' + '{d}'.format(d=domain)
-        https_res = requests.get(https_url, timeout=5)
+            # Https ---->
+            https_url = 'https://' + '{d}'.format(d=domain)
+            https_res = requests.get(https_url, timeout=5)
 
-        if https_res.status_code == 200 or https_res.status_code == 301 or https_res.status_code == 302:
-            return(domain)
+            if https_res.status_code == 200 or https_res.status_code == 301 or https_res.status_code == 302:
+                subdomain.append(domain)
+                return(None)
 
-    else:
+        else:
+            pass
+
+    except:
         pass
 
-    return None
+    return(None)
