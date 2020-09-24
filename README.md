@@ -83,6 +83,10 @@ df.fetchHackerTarget(dom)
 df.fetchThreatCrowd(dom)
 df.fetchVirusTotal(dom)
 
+# Check if a list of domain is vaild:
+dom_lst = ['tropyl.com', 'www.tropyl.com', 'fake.tropyl.com']
+df.Probe(dom _lst)
+
 ```
 
 ## Contributing

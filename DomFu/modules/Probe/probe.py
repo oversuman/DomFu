@@ -1,4 +1,16 @@
 #!/usr/bin/env python3
+'''
+list -> list
+
+This Prober cehcks if a domain is working or not.
+
+Input: ['tropyl.com', 'www.tropyl.com', 'fake.tropyl.com']
+Output: ['tropyl.com', 'www.tropyl.com']
+
+Copyright (C) 2020, Tropyl Team & Contributors.
+See the LICENSE.txt file for copying permission.
+'''
+
 import requests
 import socket
 from threading import *
