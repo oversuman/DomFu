@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+'''
+Copyright (C) 2020, DomFu Contributors.
+See the LICENSE.txt file for copying permission.
+'''
 
 import click
 import time
@@ -67,6 +71,7 @@ def subdomain(domain, output, probe):
             vt_thread = Thread(target=lambda q, arg5: q.put(
                 fetchVirusTotal(arg5)), args=(que5, domain))
 
+            # INIT: Don't try to loop this threads, it slows down the process --->
             crt_thread.start()
             bufferoverrun_thread.start()
             hackertarget_thread.start()
@@ -84,6 +89,7 @@ def subdomain(domain, output, probe):
             rhackertarget_thread = que3.get()
             rthreatcrowd_thread = que4.get()
             rvt_thread = que5.get()
+            # End: Don't try to loop this threads, it slows down the process --->
 
             yaspin().ok("[Done!] Asking ours spies about your subdomains")
 
