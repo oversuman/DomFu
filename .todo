@@ -1,9 +1,14 @@
-- Add DNS query support
-- Add Wordlist Support (active scan)
-- Add Nmap NSE based subdomain discovery (active scan)
-- Only output active domains checked through the probe.
+- Add DNS query support.
+- Add Wordlist Support.
+- Add Nmap NSE based subdomain discovery.
+- Add Shodan support with API.
+- Add virustotal support with API.
+- Add Chaos support with API.
+- Add Chaos support without API.
+- Store API keys on SQLite DB.
+- Add Nameserver and anonymous lookup to domfu probe.
 
 Done:
-- Added domain validation in DomFu.
 - Modified File System to make contribution and development a lot easier.
 - More useful cli help docs.
+- Only output active domains checked through the probe.
