@@ -89,8 +89,21 @@ df.Probe(dom _lst)
 
 ```
 
+## Features:
+
+- Fetches subdomain of a domain in the fastest possible time.
+- Built-in domain prober, useful when you want to validate your subdomains.
+- Can be used inside any python code by importing the module.
+
+## Fixes:
+
+**Issue:** Showing offline or Invalid domain even if it is online and valid after using the prober.
+**Fix:** replace `nameserver NS_IP` in /etc/resolv.conf with `nameserver 1.1.1.1`
+
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Please make sure to update tests as appropriate.
+See the .todo file and get started with any of the upcoming changes you want to make.
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Please make sure to update everything as appropriate.
 
 **Note: Do not ever make a pull request to the master branch. Switch to the dev branch to look for active development going on the tool.**
