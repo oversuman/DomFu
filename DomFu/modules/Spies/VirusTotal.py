@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+'''
+Copyright (C) 2020, DomFu Contributors.
+See the LICENSE.txt file for copying permission.
+'''
+
 import requests
 
 

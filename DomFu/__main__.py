@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+'''
+Copyright (C) 2020, DomFu Contributors.
+See the LICENSE.txt file for copying permission.
+'''
 
 import click
 import time
@@ -6,7 +10,7 @@ import socket
 from threading import *
 import queue
 from yaspin import yaspin, Spinner
-from DomFu import fetchCrtSh, fetchBufferOverRun, fetchHackerTarget, fetchThreatCrowd, fetchVirusTotal
+from DomFu import fetchCrtSh, fetchBufferOverRun, fetchHackerTarget, fetchThreatCrowd, fetchVirusTotal, Probe
 
 
 def version():
@@ -22,9 +26,10 @@ by txsadhu⠀⠀⠀
 
 
 @click.command()
-@click.option('--domain', '-d', prompt="Enter a domain name", help='Enter your domain name')
-@click.option('--output', '-o', help='Specify the output to store your subdomains')
-def subdomain(domain, output):
+@click.option('--domain', '-d', prompt="Enter a domain name", help='Enter your domain name. (USAGE: --domain=domain.tld)')
+@click.option('--output', '-o', help='Stores the output in a file. (USAGE: --output=domain.tld)',)
+@click.option('--probe', '-p', default=False, help='Validates the output domains. (USAGE: --probe=True)')
+def subdomain(domain, output, probe):
     click.echo(version())
     sp = Spinner(["[\]", "[|]", "[/]", "[-]"], 200)
 
@@ -66,6 +71,7 @@ def subdomain(domain, output):
             vt_thread = Thread(target=lambda q, arg5: q.put(
                 fetchVirusTotal(arg5)), args=(que5, domain))
 
+            # INIT: Don't try to loop this threads, it slows down the process --->
             crt_thread.start()
             bufferoverrun_thread.start()
             hackertarget_thread.start()
@@ -83,6 +89,7 @@ def subdomain(domain, output):
             rhackertarget_thread = que3.get()
             rthreatcrowd_thread = que4.get()
             rvt_thread = que5.get()
+            # End: Don't try to loop this threads, it slows down the process --->
 
             yaspin().ok("[Done!] Asking ours spies about your subdomains")
 
@@ -113,6 +120,11 @@ def subdomain(domain, output):
                 pass
 
             yaspin().ok("[Done!] Processing the data recieved")
+
+        if probe:
+            with yaspin(sp, text="Validating your Domains on our Lab"):
+                subdomain = Probe(subdomain)
+                yaspin().ok("[Done!] Validating your Domains on our Lab")
 
         timenow_end = time.perf_counter()
         subdomain = sorted(set(subdomain))
