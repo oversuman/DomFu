@@ -1,14 +1,15 @@
 - Add DNS query support.
 - Add Wordlist Support.
-- Add Nmap NSE based subdomain discovery.
 - Add Shodan support with API.
 - Add virustotal support with API.
 - Add Chaos support with API.
 - Add Chaos support without API.
-- Store API keys on SQLite DB.
+- Add UrlScan.io support with API. [https://urlscan.io/about-api/]
+- Add binaryedge.io support with API.
+- Store API keys on SQLite DB with encryption. (__main__ file) | Take input in modules as fetchModule(domain, apiKey) | domfu api <add, list, remove>
 - Add Nameserver and anonymous lookup to domfu probe.
 
-Done:
-- Modified File System to make contribution and development a lot easier.
-- More useful cli help docs.
+Done(Release v1.2):
+- Modified File System to make contributions and development a lot easier.
+- More useful CLI help docs.
 - Only output active domains checked through the probe.

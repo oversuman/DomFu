@@ -47,7 +47,7 @@ $ sudo python setup.py install
 
 ```bash
 $ sudo apt-get update -y
-$ sudo pip install DomFu==1.1.0
+$ sudo pip install DomFu==1.2
 ```
 
 **Manual Installation:**
@@ -106,4 +106,4 @@ See the .todo file and get started with any of the upcoming changes you want to 
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Please make sure to update everything as appropriate.
 
-**Note: Do not ever make a pull request to the master branch. Switch to the dev branch to look for active development going on the tool.**
+**Note: Do not ever make a direct pull request to the master branch. Switch to the dev branch to look for active development going on the tool.**
