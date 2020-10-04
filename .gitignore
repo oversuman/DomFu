@@ -13,6 +13,7 @@ develop-eggs/
 dist/
 downloads/
 eggs/
+deb_dist/
 .eggs/
 lib/
 .vscode/
@@ -47,6 +48,12 @@ coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
+
+
+#Domfu
+DomFu-*
+*.tar.gz
+
 
 # Translations
 *.mo

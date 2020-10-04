@@ -47,7 +47,7 @@ def probe_test(domain):
             http_url = 'http://' + '{d}'.format(d=domain)
             http_res = requests.head(http_url, timeout=5)
 
-            if http_res.status_code != 400 or http_res.status_code != 403:
+            if http_res.status_code == 200 or http_res.status_code == 301 or http_res.status_code == 302:
                 subdomain.append(domain)
                 return(None)
 
@@ -55,7 +55,7 @@ def probe_test(domain):
             https_url = 'https://' + '{d}'.format(d=domain)
             https_res = requests.get(https_url, timeout=5)
 
-            if https_res.status_code != 400 or https_res.status_code != 403:
+            if https_res.status_code == 200 or https_res.status_code == 301 or https_res.status_code == 302:
                 subdomain.append(domain)
                 return(None)
 

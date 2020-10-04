@@ -19,3 +19,8 @@ Major(1.2):
 Minor Ek(1.2.1):
 - Fixed issue #5
 - Faster Probing
+
+Minor Ek(1.2.2):
+- Fixed issue #5
+- Faster Probing
+- Fixed 404, 403, 400, 500 etc... error domain names in prober.
