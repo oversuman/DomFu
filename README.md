@@ -47,7 +47,7 @@ $ sudo python setup.py install
 
 ```bash
 $ sudo apt-get update -y
-$ sudo pip install DomFu==1.2
+$ sudo pip install DomFu==1.2.1
 ```
 
 **Manual Installation:**
@@ -94,11 +94,6 @@ df.Probe(dom _lst)
 - Fetches subdomain of a domain in the fastest possible time.
 - Built-in domain prober, useful when you want to validate your subdomains.
 - Can be used inside any python code by importing the module.
-
-## Fixes:
-
-**Issue:** Showing offline or Invalid domain even if it is online and valid after using the prober.
-**Fix:** replace `nameserver NS_IP` in /etc/resolv.conf with `nameserver 1.1.1.1`
 
 ## Contributing
 
