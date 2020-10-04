@@ -47,7 +47,7 @@ $ sudo python setup.py install
 
 ```bash
 $ sudo apt-get update -y
-$ sudo pip install DomFu==1.2.1
+$ sudo pip install DomFu==1.2.2
 ```
 
 **Manual Installation:**
