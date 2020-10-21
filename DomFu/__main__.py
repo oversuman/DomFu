@@ -6,8 +6,10 @@ See the LICENSE.txt file for copying permission.
 
 import click
 import requests
+import hashlib
 import time
 import socket
+import sqlite3 as lite
 from threading import *
 import queue
 from yaspin import yaspin, Spinner
@@ -27,12 +29,17 @@ by txsadhu⠀⠀⠀
     ''')
 
 
-@click.command()
+@click.group()
 @click.version_option()
-@click.option('--domain', '-d', prompt="Enter a domain name", help='Enter your domain name. (USAGE: --domain=domain.tld)')
-@click.option('--output', '-o', help='Stores the output in a file. (USAGE: cc=domain.tld)',)
+def domfucli():
+    pass
+
+
+@domfucli.command()
+@click.option('--domain', '-d', prompt="Enter a domain name", help='Enter your domain name.')
+@click.option('--output', '-o', help='Stores the output in a file.',)
 @click.option('--probe / --no-probe', '-p / -np', default=False, help='Validates the output domains')
-def subdomain(domain, output, probe):
+def passive(domain, output, probe):
     click.echo(version())
     sp = Spinner(["[\]", "[|]", "[/]", "[-]"], 200)
     torthere = True
@@ -55,7 +62,7 @@ def subdomain(domain, output, probe):
                 else:
                     torthere = False
                     yaspin().ok(
-                        "[Eww...] Install and Connect to Tor to run prober")
+                        "[Eww...] Install and Connect to Tor to run prober (May be you forgot to start TOR)")
             except:
                 torthere = False
                 yaspin().ok(
@@ -182,11 +189,106 @@ def subdomain(domain, output, probe):
             print("")
 
     else:
-        print("Error (TPYL_DomFu_INVDOM): Enter a valid domain")
+        print("Error (TPYL_DOMFU_INVDOM): Enter a valid domain")
         print("\n")
 
     print('-'*60)
 
 
+@domfucli.command()
+@click.option('--shodan', help="Add Virus Total Key")
+@click.option('--chaos', help="Add TH key")
+@click.option('--update / --not-update', '-up / -nup', default=False, help="Update the existing keys")
+def api(shodan, chaos, update):
+    click.echo(version())
+
+    connection = lite.connect('domfu_api.db')
+    cur = connection.cursor()
+    cur.execute(
+        "CREATE TABLE IF NOT EXISTS apis(name TEXT PRIMARY KEY, key TEXT)")
+
+    if shodan:
+        if update:
+            try:
+                name = 'shodan'
+                api_key = shodan
+                cur.execute(
+                    "UPDATE apis SET key = (?) WHERE name = (?)", (api_key, name))
+                connection.commit()
+                print('[Done!] Updated the value in DB')
+                print('')
+            except:
+                print('[x] Failed to Update')
+                print('')
+
+        else:
+            try:
+                name = 'shodan'
+                api_key = shodan
+                cur.execute("INSERT INTO apis VALUES (?, ?)", (name, api_key))
+                connection.commit()
+                print('[Done!] Added your api key in DB')
+                print('')
+            except:
+                print('[x] Value already exists in DB')
+                print('')
+
+    if chaos:
+        if update:
+            try:
+                name = 'chaos'
+                api_key = chaos
+                cur.execute(
+                    "UPDATE apis SET key = (?) WHERE name = (?)", (api_key, name))
+                connection.commit()
+                print('[Done!] Updated the value in DB')
+                print('')
+            except:
+                print('[x] Failed to Update')
+                print('')
+
+        else:
+            try:
+                name = 'chaos'
+                api_key = chaos
+                cur.execute("INSERT INTO apis VALUES (?, ?)", (name, api_key))
+                connection.commit()
+                print('[Done!] Added your api key in DB')
+                print('')
+            except:
+                print('[x] Value already exists in DB')
+                print('')
+
+    cur.execute("SELECT name FROM apis")
+    api_res = cur.fetchall()
+
+    connection.close()
+
+    av_api = []
+
+    for api in api_res:
+        av_api.append(api[0])
+
+    if 'shodan' in av_api:
+        sho_key = "available"
+        sym = '+'
+    else:
+        sho_key = "not available"
+        sym = '-'
+
+    if 'chaos' in av_api:
+        chaos_key = "available"
+        sym = '+'
+    else:
+        chaos_key = "not available"
+        sym = '-'
+
+    print(f"[{sym}] Sodan API key: {sho_key}")
+    print(f"[{sym}] Chaos API key: {chaos_key}")
+    print('')
+    print('-'*60)
+    print('')
+
+
 if __name__ == '__main__':
-    subdomain()
+    domfucli()

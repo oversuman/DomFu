@@ -18,10 +18,11 @@ setup(
         "requests",
         "requests[socks]",
         "requests[security]",
-        "fake_useragent"
+        "fake_useragent",
+        "hashlib",
     ],
     entry_points='''
         [console_scripts]
-        domfu=DomFu.__main__:subdomain
+        domfu=DomFu.__main__:domfucli
     ''',
 )
