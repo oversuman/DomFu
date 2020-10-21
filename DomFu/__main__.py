@@ -5,11 +5,13 @@ See the LICENSE.txt file for copying permission.
 '''
 
 import click
+import requests
 import time
 import socket
 from threading import *
 import queue
 from yaspin import yaspin, Spinner
+from fake_useragent import UserAgent
 from DomFu import fetchCrtSh, fetchBufferOverRun, fetchHackerTarget, fetchThreatCrowd, fetchVirusTotal, Probe
 
 
@@ -19,19 +21,45 @@ def version():
 ⣿⣿⣿⡇⠀⣿⣿⣿⡀⢠⣿⠀⢀⣿⣿⣿⣿⣷⠀⣿⣿⣿⡇⣿⣿⣿⣿⣆⣿⣿⣿⣿⣆⢸⣿⣿⡏⢾⣿⣿⣿⢸⣿⣿⣿⠀⢸⣿⣿⣿⠀⠀⠀⠀
 ⣿⣿⣿⡇⢀⣿⣿⣿⣷⣿⣿⣄⠀⠉⢻⣿⣿⣿⡇⣿⣿⣿⡟⠈⣿⣿⣿⣟⠈⣿⣿⣿⣇⢸⣿⣿⣿⣤⣭⣩⠉⢸⣿⣿⣿⠀⣸⣿⣿⣿⠀⠀⠀⠀
 ⣿⣿⣿⢿⣿⣿⣿⣿⠃⠹⣿⣿⣿⣿⣿⣿⣿⣿⠀⣿⣿⣿⡇⠀⣿⣿⣿⣇⠀⣿⣿⣿⡇⢸⣿⣿⣿⠀⠀⠀⠀⢸⣿⣿⣿⣿⢹⣿⣿⣿⠀⠀⠀⠀⠀
-⠻⠻⠛⠸⠻⠻⠛⠁⠀⠀⠈⠛⠻⠿⠿⠛⠉⠀⠀⠻⠻⠻⠃⠀⠻⠻⠻⠓⠀⠻⠻⠻⠃⠸⠻⠻⠻⠀⠀⠀⠀⠀⠛⠻⠻⠋⠸⠻⠻⠻⠀⠀v1.2.2
+⠻⠻⠛⠸⠻⠻⠛⠁⠀⠀⠈⠛⠻⠿⠿⠛⠉⠀⠀⠻⠻⠻⠃⠀⠻⠻⠻⠓⠀⠻⠻⠻⠃⠸⠻⠻⠻⠀⠀⠀⠀⠀⠛⠻⠻⠋⠸⠻⠻⠻⠀⠀v1.2.3
 by txsadhu⠀⠀⠀
 ------------------------------------------------------------⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
     ''')
 
 
 @click.command()
+@click.version_option()
 @click.option('--domain', '-d', prompt="Enter a domain name", help='Enter your domain name. (USAGE: --domain=domain.tld)')
-@click.option('--output', '-o', help='Stores the output in a file. (USAGE: --output=domain.tld)',)
-@click.option('--probe', '-p', default=False, help='Validates the output domains. (USAGE: --probe=True)')
+@click.option('--output', '-o', help='Stores the output in a file. (USAGE: cc=domain.tld)',)
+@click.option('--probe / --no-probe', '-p / -np', default=False, help='Validates the output domains')
 def subdomain(domain, output, probe):
     click.echo(version())
     sp = Spinner(["[\]", "[|]", "[/]", "[-]"], 200)
+    torthere = True
+
+    if probe:
+        with yaspin(sp, text="Checking if Tor is installed in your system"):
+            try:
+                headers = {'User-Agent': UserAgent().random}
+                proxies = {
+                    'http': 'socks5://127.0.0.1:9050',
+                    'https': 'socks5://127.0.0.1:9050'
+                }
+                fetchURL = requests.get(
+                    'https://check.torproject.org/api/ip', headers=headers, proxies=proxies).json()
+
+                if fetchURL['IsTor'] == True:
+                    torthere = True
+                    yaspin().ok(
+                        "[Done!] Checking if Tor is installed in your system")
+                else:
+                    torthere = False
+                    yaspin().ok(
+                        "[Eww...] Install and Connect to Tor to run prober")
+            except:
+                torthere = False
+                yaspin().ok(
+                    "[TPYL_DOMFU_TOR] There was a problem checking tor")
 
     with yaspin(sp, text="Checking if the domain is online or valid"):
         try:
@@ -45,7 +73,7 @@ def subdomain(domain, output, probe):
 
     subdomain = []
 
-    if dom_valid:
+    if dom_valid and torthere:
         timenow_start = time.perf_counter()
 
         with yaspin(sp, text="Asking ours spies about your subdomains"):

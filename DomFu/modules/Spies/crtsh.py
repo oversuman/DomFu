@@ -5,6 +5,7 @@ See the LICENSE.txt file for copying permission.
 '''
 
 import requests
+from fake_useragent import UserAgent
 
 
 def fetchCrtSh(domain):
@@ -17,9 +18,10 @@ def fetchCrtSh(domain):
     Output : ['tropyl.com', 'www.tropyl.com']
     '''
     subdomains = []
+    headers = {'User-Agent': UserAgent().random}
 
     fetchURL = requests.get(
-        "https://crt.sh/?q=%.{d}&output=json".format(d=domain))
+        "https://crt.sh/?q=%.{d}&output=json".format(d=domain), headers=headers)
 
     if fetchURL.status_code == 200:
         for (key, value) in enumerate(fetchURL.json()):

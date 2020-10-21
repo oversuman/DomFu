@@ -1,13 +1,11 @@
-- Add DNS query support.
+T - Add DNS query support.
 - Add Wordlist Support.
-- Add Shodan support with API.
+T - Add Shodan support with API.
 - Add virustotal support with API.
-- Add Chaos support with API.
-- Add Chaos support without API.
+T - Add Chaos support with API.
 - Add UrlScan.io support with API. [https://urlscan.io/about-api/]
 - Add binaryedge.io support with API.
-- Store API keys on SQLite DB with encryption. (__main__ file) | Take input in modules as fetchModule(domain, apiKey) | domfu api <add, list, remove>
-- Add Nameserver and anonymous lookup to domfu probe.
+T - Store API keys on SQLite DB with encryption. (__main__ file) | Take input in modules as fetchModule(domain, apiKey) | domfu api <add, list, remove>
 
 Done(Release v1.2.1):
 
@@ -23,4 +21,7 @@ Minor Ek(1.2.1):
 Minor Ek(1.2.2):
 - Fixed issue #5
 - Faster Probing
-- Fixed 404, 403, 400, 500 etc... error domain names in prober.
+
+Minor EK(1.2.3):
+- Added Support for Tor on the prober.
+- All requests made through our spies are anonymous.

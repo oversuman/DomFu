@@ -5,6 +5,7 @@ See the LICENSE.txt file for copying permission.
 '''
 
 import requests
+from fake_useragent import UserAgent
 
 
 def fetchThreatCrowd(domain):
@@ -17,8 +18,10 @@ def fetchThreatCrowd(domain):
     Output : ['tropyl.com', 'www.tropyl.com']
 
     '''
+    headers = {'User-Agent': UserAgent().random}
+
     fetchURL = requests.get(
-        "https://www.threatcrowd.org/searchApi/v2/domain/report/?domain=%s" % (domain))
+        "https://www.threatcrowd.org/searchApi/v2/domain/report/?domain=%s" % (domain), headers=headers)
     jsonResponse = fetchURL.json()
 
     if int(jsonResponse["response_code"]) == 1:

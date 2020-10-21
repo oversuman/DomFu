@@ -5,6 +5,7 @@ See the LICENSE.txt file for copying permission.
 '''
 
 import requests
+from fake_useragent import UserAgent
 
 
 def fetchHackerTarget(domain):
@@ -19,9 +20,10 @@ def fetchHackerTarget(domain):
     '''
 
     subdomainlst = []
+    headers = {'User-Agent': UserAgent().random}
 
     fetchURL = requests.get(
-        "https://api.hackertarget.com/hostsearch/?q=%s" % (domain)).text
+        "https://api.hackertarget.com/hostsearch/?q=%s" % (domain), headers=headers).text
 
     if 'error' not in fetchURL:
         subdomains = str(fetchURL)
