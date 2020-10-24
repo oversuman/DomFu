@@ -67,177 +67,182 @@ def passive(domain, output, probe):
             except:
                 torthere = False
                 yaspin().ok(
-                    "[TPYL_DOMFU_TOR] There was a problem checking tor")
+                    "[Eww...] Install and Connect to Tor to run prober (May be you forgot to start TOR)")
+    if torthere:
 
-    with yaspin(sp, text="Checking if the domain is online or valid"):
-        try:
-            socket.gethostbyname(domain)
-            dom_valid = True
-            yaspin().ok("[Valid!] Looks like your domain is valid and online")
-        except socket.gaierror:
-            dom_valid = False
-            yaspin().fail(
-                "[Invalid!] Looks like your domain is offline or invalid")
-
-    with yaspin(sp, text="Connecting to DB..."):
-        try:
-            connection = lite.connect('domfu_api.db')
-            cur = connection.cursor()
-            yaspin().ok("[Done!] Connecting to DB...")
-        except:
-            yaspin().fail("[Error!] Connecting to DB...")
-
-    with yaspin(sp, text="Fetching your API keys from DB"):
-        try:
-            cur.execute("SELECT * FROM apis")
-            api_klst = cur.fetchall()
-            apiDB = {}
-
-            for api in api_klst:
-                apiDB[api[0]] = api[1]
-
-            connection.close()
-            yaspin().ok("[Done!] Fetching your API keys from DB...")
-        except:
-            yaspin().fail("[Error!] Fetching your API keys from DB...")
-
-    subdomain = []
-
-    if dom_valid and torthere:
-        timenow_start = time.perf_counter()
-
-        with yaspin(sp, text="Asking ours spies about your subdomains"):
-
-            que1 = queue.Queue()
-            que2 = queue.Queue()
-            que3 = queue.Queue()
-            que4 = queue.Queue()
-            que5 = queue.Queue()
-            que6 = queue.Queue()
-            que7 = queue.Queue()
-
-            crt_thread = Thread(target=lambda q, arg1: q.put(
-                fetchCrtSh(arg1)), args=(que1, domain))
-
-            bufferoverrun_thread = Thread(target=lambda q, arg2: q.put(
-                fetchBufferOverRun(arg2)), args=(que2, domain))
-
-            hackertarget_thread = Thread(target=lambda q, arg3: q.put(
-                fetchHackerTarget(arg3)), args=(que3, domain))
-
-            threatcrowd_thread = Thread(target=lambda q, arg4: q.put(
-                fetchThreatCrowd(arg4)), args=(que4, domain))
-
-            vt_thread = Thread(target=lambda q, arg5: q.put(
-                fetchVirusTotal(arg5)), args=(que5, domain))
-
-            shodan_thread = Thread(target=lambda q, arg6, arg7: q.put(
-                fetchShodan(arg6, arg7)), args=(que6, domain, apiDB['shodan']))
-
-            chaos_thread = Thread(target=lambda q, arg8, arg9: q.put(
-                fetchChaos(arg8, arg9)), args=(que7, domain, apiDB['chaos']))
-
-            # INIT: Don't try to loop this threads, it slows down the process --->
-            crt_thread.start()
-            bufferoverrun_thread.start()
-            hackertarget_thread.start()
-            threatcrowd_thread.start()
-            vt_thread.start()
-            shodan_thread.start()
-            chaos_thread.start()
-
-            crt_thread.join()
-            bufferoverrun_thread.join()
-            hackertarget_thread.join()
-            threatcrowd_thread.join()
-            vt_thread.join()
-            shodan_thread.join()
-            chaos_thread.join()
-
-            rcrt_thread = que1.get()
-            rbufferoverrun_thread = que2.get()
-            rhackertarget_thread = que3.get()
-            rthreatcrowd_thread = que4.get()
-            rvt_thread = que5.get()
-            rshodan_thread = que6.get()
-            rchaos_thread = que7.get()
-            # End: Don't try to loop this threads, it slows down the process --->
-
-            yaspin().ok("[Done!] Asking ours spies about your subdomains")
-
-        with yaspin(sp, text="Processing the data recieved"):
+        with yaspin(sp, text="Checking if the domain is online or valid"):
             try:
-                subdomain.extend(rcrt_thread)
-            except:
-                pass
+                socket.gethostbyname(domain)
+                dom_valid = True
+                yaspin().ok(
+                    "[Valid!] Looks like your domain is valid and online")
+            except socket.gaierror:
+                dom_valid = False
+                yaspin().fail(
+                    "[Invalid!] Looks like your domain is offline or invalid")
 
+        with yaspin(sp, text="Connecting to DB..."):
             try:
-                subdomain.extend(rbufferoverrun_thread)
+                connection = lite.connect('domfu_api.db')
+                cur = connection.cursor()
+                yaspin().ok("[Done!] Connecting to DB...")
             except:
-                pass
+                yaspin().fail("[Error!] Connecting to DB...")
 
+        with yaspin(sp, text="Fetching your API keys from DB"):
             try:
-                subdomain.extend(rhackertarget_thread)
+                cur.execute("SELECT * FROM apis")
+                api_klst = cur.fetchall()
+                apiDB = {}
+
+                for api in api_klst:
+                    apiDB[api[0]] = api[1]
+
+                connection.close()
+                yaspin().ok("[Done!] Fetching your API keys from DB...")
             except:
-                pass
+                yaspin().fail("[Error!] Fetching your API keys from DB...")
 
-            try:
-                subdomain.extend(rthreatcrowd_thread)
-            except:
-                pass
+        subdomain = []
 
-            try:
-                subdomain.extend(rvt_thread)
-            except:
-                pass
+        if dom_valid:
+            timenow_start = time.perf_counter()
 
-            try:
-                subdomain.extend(rshodan_thread)
-            except:
-                pass
+            with yaspin(sp, text="Asking ours spies about your subdomains"):
 
-            try:
-                subdomain.extend(rchaos_thread)
-            except:
-                pass
+                que1 = queue.Queue()
+                que2 = queue.Queue()
+                que3 = queue.Queue()
+                que4 = queue.Queue()
+                que5 = queue.Queue()
+                que6 = queue.Queue()
+                que7 = queue.Queue()
 
-            yaspin().ok("[Done!] Processing the data recieved")
+                crt_thread = Thread(target=lambda q, arg1: q.put(
+                    fetchCrtSh(arg1)), args=(que1, domain))
 
-        if probe:
-            with yaspin(sp, text="Validating your Domains on our Lab"):
-                subdomain = Probe(subdomain)
-                yaspin().ok("[Done!] Validating your Domains on our Lab")
+                bufferoverrun_thread = Thread(target=lambda q, arg2: q.put(
+                    fetchBufferOverRun(arg2)), args=(que2, domain))
 
-        timenow_end = time.perf_counter()
-        subdomain = sorted(set(subdomain))
-        print('')
-        print('-'*60)
-        print('')
+                hackertarget_thread = Thread(target=lambda q, arg3: q.put(
+                    fetchHackerTarget(arg3)), args=(que3, domain))
 
-        if output != None:
-            print('\n'.join(subdomain))
-            print("")
+                threatcrowd_thread = Thread(target=lambda q, arg4: q.put(
+                    fetchThreatCrowd(arg4)), args=(que4, domain))
+
+                vt_thread = Thread(target=lambda q, arg5: q.put(
+                    fetchVirusTotal(arg5)), args=(que5, domain))
+
+                shodan_thread = Thread(target=lambda q, arg6, arg7: q.put(
+                    fetchShodan(arg6, arg7)), args=(que6, domain, apiDB['shodan']))
+
+                chaos_thread = Thread(target=lambda q, arg8, arg9: q.put(
+                    fetchChaos(arg8, arg9)), args=(que7, domain, apiDB['chaos']))
+
+                # INIT: Don't try to loop this threads, it slows down the process --->
+                crt_thread.start()
+                bufferoverrun_thread.start()
+                hackertarget_thread.start()
+                threatcrowd_thread.start()
+                vt_thread.start()
+                shodan_thread.start()
+                chaos_thread.start()
+
+                crt_thread.join()
+                bufferoverrun_thread.join()
+                hackertarget_thread.join()
+                threatcrowd_thread.join()
+                vt_thread.join()
+                shodan_thread.join()
+                chaos_thread.join()
+
+                rcrt_thread = que1.get()
+                rbufferoverrun_thread = que2.get()
+                rhackertarget_thread = que3.get()
+                rthreatcrowd_thread = que4.get()
+                rvt_thread = que5.get()
+                rshodan_thread = que6.get()
+                rchaos_thread = que7.get()
+                # End: Don't try to loop this threads, it slows down the process --->
+
+                yaspin().ok("[Done!] Asking ours spies about your subdomains")
+
+            with yaspin(sp, text="Processing the data recieved"):
+                try:
+                    subdomain.extend(rcrt_thread)
+                except:
+                    pass
+
+                try:
+                    subdomain.extend(rbufferoverrun_thread)
+                except:
+                    pass
+
+                try:
+                    subdomain.extend(rhackertarget_thread)
+                except:
+                    pass
+
+                try:
+                    subdomain.extend(rthreatcrowd_thread)
+                except:
+                    pass
+
+                try:
+                    subdomain.extend(rvt_thread)
+                except:
+                    pass
+
+                try:
+                    subdomain.extend(rshodan_thread)
+                except:
+                    pass
+
+                try:
+                    subdomain.extend(rchaos_thread)
+                except:
+                    pass
+
+                yaspin().ok("[Done!] Processing the data recieved")
+
+            if probe:
+                with yaspin(sp, text="Validating your Domains on our Lab"):
+                    subdomain = Probe(subdomain)
+                    yaspin().ok("[Done!] Validating your Domains on our Lab")
+
+            timenow_end = time.perf_counter()
+            subdomain = sorted(set(subdomain))
+            print('')
             print('-'*60)
-            fileoutput = open('%s' % output, 'w')
-            towrite = '\n'.join(subdomain)
-            fileoutput.write(towrite)
-            fileoutput.close()
-            print("")
-            print(
-                f"All Done! in {round(timenow_end-timenow_start, 2)} second(s). Check your output file")
-            print("")
+            print('')
+
+            if output != None:
+                print('\n'.join(subdomain))
+                print("")
+                print('-'*60)
+                fileoutput = open('%s' % output, 'w')
+                towrite = '\n'.join(subdomain)
+                fileoutput.write(towrite)
+                fileoutput.close()
+                print("")
+                print(
+                    f"All Done! in {round(timenow_end-timenow_start, 2)} second(s). Check your output file")
+                print("")
+            else:
+                print('\n'.join(subdomain))
+                print("")
+                print('-'*60)
+                print("")
+                print(
+                    f"All Done! in {round(timenow_end-timenow_start, 2)} second(s).")
+                print("")
+
         else:
-            print('\n'.join(subdomain))
-            print("")
-            print('-'*60)
-            print("")
-            print(
-                f"All Done! in {round(timenow_end-timenow_start, 2)} second(s).")
-            print("")
+            print("Error (TPYL_DOMFU_INVDOM): Enter a valid domain")
+            print("\n")
 
     else:
-        print("Error (TPYL_DOMFU_INVDOM): Enter a valid domain")
-        print("\n")
+        print('')
 
     print('-'*60)
 
@@ -252,7 +257,8 @@ def passive(domain, output, probe):
 @click.option('--shodan', help="Add Shodan API Key")
 @click.option('--chaos', help="Add Chaos API key")
 @click.option('--update / --not-update', '-up / -nup', default=False, help="Update the existing keys")
-def api(shodan, chaos, update):
+@click.option('--delete / --not-delete', '-del / -ndel', default=False, help="Delete the existing keys")
+def api(shodan, chaos, update, delete):
     click.echo(version())
 
     connection = lite.connect('domfu_api.db')
@@ -261,7 +267,18 @@ def api(shodan, chaos, update):
         "CREATE TABLE IF NOT EXISTS apis(name TEXT PRIMARY KEY, key TEXT)")
 
     if shodan:
-        if update:
+        if delete:
+            try:
+                name = 'shodan'
+                cur.execute("DELETE FROM apis WHERE name = (?)", (name,))
+                connection.commit()
+                print('[Done!] Deleted the value in DB')
+                print('')
+            except:
+                print('[X] Failed to delete')
+                print('')
+
+        elif update:
             try:
                 name = 'shodan'
                 api_key = shodan
@@ -287,7 +304,18 @@ def api(shodan, chaos, update):
                 print('')
 
     if chaos:
-        if update:
+        if delete:
+            try:
+                name = 'chaos'
+                cur.execute("DELETE FROM apis WHERE id = (?)", (name,))
+                connection.commit()
+                print('[Done!] Deleted the value in DB')
+                print('')
+            except:
+                print('[X] Failed to delete')
+                print('')
+
+        elif update:
             try:
                 name = 'chaos'
                 api_key = chaos
