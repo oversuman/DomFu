@@ -18,8 +18,6 @@ setup(
         "requests",
         "requests[socks]",
         "requests[security]",
-        "fake_useragent",
-        "hashlib",
     ],
     entry_points='''
         [console_scripts]

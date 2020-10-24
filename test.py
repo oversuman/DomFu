@@ -1,8 +1,13 @@
-import hashlib
+# import sqlite3 as lite
 
-apikey = "FFFFFFFFFF"
-api_key = hashlib.sha256(str(apikey).encode('utf-8')).hexdigest()
+# connection = lite.connect('domfu_api.db')
+# cur = connection.cursor()
+# cur.execute("SELECT * FROM apis")
+# api_klst = cur.fetchall()
 
+# apilst = {}
 
-print(api_key)
-print(api_key_de)
+# for api in api_klst:
+#     apilst[api[0]] = api[1]
+
+# print(apilst['shodan'])

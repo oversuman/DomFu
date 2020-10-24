@@ -5,7 +5,6 @@ See the LICENSE.txt file for copying permission.
 '''
 
 import requests
-from fake_useragent import UserAgent
 
 
 def fetchBufferOverRun(domain):
@@ -20,15 +19,9 @@ def fetchBufferOverRun(domain):
     '''
 
     subdomain = []
-    headers = {'User-Agent': UserAgent().random}
-
-    proxies = {
-        'http': 'socks5://127.0.0.1:9050',
-        'https': 'socks5://127.0.0.1:9050'
-    }
 
     fetchURL = requests.get(
-        "https://dns.bufferover.run/dns?q=.%s" % (domain), headers=headers)
+        "https://dns.bufferover.run/dns?q=.%s" % (domain))
 
     jsonResponse = fetchURL.json()
     subdomainlst = jsonResponse['FDNS_A']

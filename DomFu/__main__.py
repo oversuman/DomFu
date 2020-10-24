@@ -6,7 +6,6 @@ See the LICENSE.txt file for copying permission.
 
 import click
 import requests
-import hashlib
 import time
 import socket
 import sqlite3 as lite
@@ -14,7 +13,7 @@ from threading import *
 import queue
 from yaspin import yaspin, Spinner
 from fake_useragent import UserAgent
-from DomFu import fetchCrtSh, fetchBufferOverRun, fetchHackerTarget, fetchThreatCrowd, fetchVirusTotal, Probe
+from DomFu import fetchCrtSh, fetchBufferOverRun, fetchHackerTarget, fetchThreatCrowd, fetchShodan, fetchChaos, fetchVirusTotal, Probe
 
 
 def version():
@@ -33,6 +32,8 @@ by txsadhu⠀⠀⠀
 @click.version_option()
 def domfucli():
     pass
+
+# Passive begins here ----------->
 
 
 @domfucli.command()
@@ -78,6 +79,28 @@ def passive(domain, output, probe):
             yaspin().fail(
                 "[Invalid!] Looks like your domain is offline or invalid")
 
+    with yaspin(sp, text="Connecting to DB..."):
+        try:
+            connection = lite.connect('domfu_api.db')
+            cur = connection.cursor()
+            yaspin().ok("[Done!] Connecting to DB...")
+        except:
+            yaspin().fail("[Error!] Connecting to DB...")
+
+    with yaspin(sp, text="Fetching your API keys from DB"):
+        try:
+            cur.execute("SELECT * FROM apis")
+            api_klst = cur.fetchall()
+            apiDB = {}
+
+            for api in api_klst:
+                apiDB[api[0]] = api[1]
+
+            connection.close()
+            yaspin().ok("[Done!] Fetching your API keys from DB...")
+        except:
+            yaspin().fail("[Error!] Fetching your API keys from DB...")
+
     subdomain = []
 
     if dom_valid and torthere:
@@ -90,6 +113,8 @@ def passive(domain, output, probe):
             que3 = queue.Queue()
             que4 = queue.Queue()
             que5 = queue.Queue()
+            que6 = queue.Queue()
+            que7 = queue.Queue()
 
             crt_thread = Thread(target=lambda q, arg1: q.put(
                 fetchCrtSh(arg1)), args=(que1, domain))
@@ -106,24 +131,36 @@ def passive(domain, output, probe):
             vt_thread = Thread(target=lambda q, arg5: q.put(
                 fetchVirusTotal(arg5)), args=(que5, domain))
 
+            shodan_thread = Thread(target=lambda q, arg6, arg7: q.put(
+                fetchShodan(arg6, arg7)), args=(que6, domain, apiDB['shodan']))
+
+            chaos_thread = Thread(target=lambda q, arg8, arg9: q.put(
+                fetchChaos(arg8, arg9)), args=(que7, domain, apiDB['chaos']))
+
             # INIT: Don't try to loop this threads, it slows down the process --->
             crt_thread.start()
             bufferoverrun_thread.start()
             hackertarget_thread.start()
             threatcrowd_thread.start()
             vt_thread.start()
+            shodan_thread.start()
+            chaos_thread.start()
 
             crt_thread.join()
             bufferoverrun_thread.join()
             hackertarget_thread.join()
             threatcrowd_thread.join()
             vt_thread.join()
+            shodan_thread.join()
+            chaos_thread.join()
 
             rcrt_thread = que1.get()
             rbufferoverrun_thread = que2.get()
             rhackertarget_thread = que3.get()
             rthreatcrowd_thread = que4.get()
             rvt_thread = que5.get()
+            rshodan_thread = que6.get()
+            rchaos_thread = que7.get()
             # End: Don't try to loop this threads, it slows down the process --->
 
             yaspin().ok("[Done!] Asking ours spies about your subdomains")
@@ -151,6 +188,16 @@ def passive(domain, output, probe):
 
             try:
                 subdomain.extend(rvt_thread)
+            except:
+                pass
+
+            try:
+                subdomain.extend(rshodan_thread)
+            except:
+                pass
+
+            try:
+                subdomain.extend(rchaos_thread)
             except:
                 pass
 
@@ -195,9 +242,15 @@ def passive(domain, output, probe):
     print('-'*60)
 
 
+# Passive begins here ----------->
+
+
+# API begins here ----------->
+
+
 @domfucli.command()
-@click.option('--shodan', help="Add Virus Total Key")
-@click.option('--chaos', help="Add TH key")
+@click.option('--shodan', help="Add Shodan API Key")
+@click.option('--chaos', help="Add Chaos API key")
 @click.option('--update / --not-update', '-up / -nup', default=False, help="Update the existing keys")
 def api(shodan, chaos, update):
     click.echo(version())
@@ -288,6 +341,9 @@ def api(shodan, chaos, update):
     print('')
     print('-'*60)
     print('')
+
+
+# API ends here ----------->
 
 
 if __name__ == '__main__':

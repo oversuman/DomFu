@@ -5,7 +5,6 @@ See the LICENSE.txt file for copying permission.
 '''
 
 import requests
-from fake_useragent import UserAgent
 
 
 def fetchVirusTotal(domain):
@@ -20,13 +19,12 @@ def fetchVirusTotal(domain):
     '''
     subdomain = []
     session = requests.Session()
-    headers = {'User-Agent': UserAgent().random}
     url = 'https://www.virustotal.com/ui/domains/{d}/subdomains'
     formaturl = url.format(d=domain)
 
     try:
         resp = session.get(
-            formaturl, headers=headers, timeout=25).json()
+            formaturl, timeout=25).json()
     except:
         return(subdomain)
 

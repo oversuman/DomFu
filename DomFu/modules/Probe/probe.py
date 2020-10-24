@@ -13,7 +13,6 @@ See the LICENSE.txt file for copying permission.
 
 import requests
 from threading import *
-from fake_useragent import UserAgent
 
 global subdomain
 subdomain = []
@@ -40,14 +39,13 @@ def Probe(subdomainList):
 
 
 def probe_test(domain):
-    headers = {'User-Agent': UserAgent().random}
     tt = 5
 
     try:
         # Http ----->
         http_url = 'http://' + '{d}'.format(d=domain)
         http_res = requests.head(
-            http_url, timeout=tt, headers=headers, proxies=proxies)
+            http_url, timeout=tt, proxies=proxies)
 
         if http_res.status_code == 200 or http_res.status_code == 301 or http_res.status_code == 302:
             subdomain.append(domain)
@@ -56,7 +54,7 @@ def probe_test(domain):
         # Https ---->
         https_url = 'https://' + '{d}'.format(d=domain)
         https_res = requests.head(
-            https_url, timeout=tt, headers=headers, proxies=proxies)
+            https_url, timeout=tt, proxies=proxies)
 
         if https_res.status_code == 200 or https_res.status_code == 301 or https_res.status_code == 302:
             subdomain.append(domain)
