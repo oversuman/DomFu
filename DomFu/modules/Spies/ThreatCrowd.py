@@ -17,6 +17,7 @@ def fetchThreatCrowd(domain):
     Output : ['tropyl.com', 'www.tropyl.com']
 
     '''
+
     fetchURL = requests.get(
         "https://www.threatcrowd.org/searchApi/v2/domain/report/?domain=%s" % (domain))
     jsonResponse = fetchURL.json()

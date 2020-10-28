@@ -12,11 +12,15 @@ See the LICENSE.txt file for copying permission.
 '''
 
 import requests
-import socket
 from threading import *
 
 global subdomain
 subdomain = []
+
+proxies = {
+    'http': 'socks5://127.0.0.1:9050',
+    'https': 'socks5://127.0.0.1:9050'
+}
 
 
 def Probe(subdomainList):
@@ -35,32 +39,26 @@ def Probe(subdomainList):
 
 
 def probe_test(domain):
-    try:
-        socket.gethostbyname(domain)
-        dom_valid = True
-    except:
-        dom_valid = False
+    tt = 5
 
     try:
-        if dom_valid:
-            # Http ----->
-            http_url = 'http://' + '{d}'.format(d=domain)
-            http_res = requests.head(http_url, timeout=5)
+        # Http ----->
+        http_url = 'http://' + '{d}'.format(d=domain)
+        http_res = requests.head(
+            http_url, timeout=tt, proxies=proxies)
 
-            if http_res.status_code == 200 or http_res.status_code == 301 or http_res.status_code == 302:
-                subdomain.append(domain)
-                return(None)
+        if http_res.status_code == 200 or http_res.status_code == 301 or http_res.status_code == 302:
+            subdomain.append(domain)
+            return(None)
 
-            # Https ---->
-            https_url = 'https://' + '{d}'.format(d=domain)
-            https_res = requests.get(https_url, timeout=5)
+        # Https ---->
+        https_url = 'https://' + '{d}'.format(d=domain)
+        https_res = requests.head(
+            https_url, timeout=tt, proxies=proxies)
 
-            if https_res.status_code == 200 or https_res.status_code == 301 or https_res.status_code == 302:
-                subdomain.append(domain)
-                return(None)
-
-        else:
-            pass
+        if https_res.status_code == 200 or https_res.status_code == 301 or https_res.status_code == 302:
+            subdomain.append(domain)
+            return(None)
 
     except:
         pass

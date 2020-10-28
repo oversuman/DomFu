@@ -47,7 +47,7 @@ $ sudo python setup.py install
 
 ```bash
 $ sudo apt-get update -y
-$ sudo pip install DomFu==1.2.2
+$ sudo pip install DomFu==1.2.3
 ```
 
 **Manual Installation:**
@@ -66,7 +66,7 @@ $ sudo python setup.py install
 domfu --help
 ```
 
-**Using it as a python module:**
+**Using it as a python module:** (Check the wiki for more)
 
 ```python
 import DomFu as df
