@@ -7,7 +7,7 @@
     <img src="https://img.shields.io/badge/Python-3.8-green.svg">
   </a>
   <a href="https://github.com/txsadhu/domfu/releases">
-    <img src="https://img.shields.io/badge/DomFu-v1.1-violet.svg">
+    <img src="https://img.shields.io/badge/DomFu-v1.2-violet.svg">
   </a>
   <a href="https://github.com/txsadhu/domfu/">
       <img src="https://img.shields.io/badge/Tested%20on-Linux-yellow.svg">
@@ -15,7 +15,7 @@
   <a href="https://github.com/TxSadhu/DomFu/blob/master/LICENSE.txt">
     <img src="https://img.shields.io/badge/License-GPLv3-orange.svg">
   </a> 
-  <a href="https://github.com/TxSadhu/DomFu/releases/tag/v1.1.0/">
+  <a href="https://github.com/TxSadhu/DomFu/releases/tag/v1.2.4/">
     <img src="https://img.shields.io/badge/Release-Stable-green.svg">
   </a>
 </p>
@@ -47,7 +47,7 @@ $ sudo python setup.py install
 
 ```bash
 $ sudo apt-get update -y
-$ sudo pip install DomFu==1.2.3
+$ sudo pip install DomFu==1.2.4
 ```
 
 **Manual Installation:**
@@ -66,7 +66,7 @@ $ sudo python setup.py install
 domfu --help
 ```
 
-**Using it as a python module:** (Check the wiki for more)
+**Using it as a python module:** ([Check the wiki for more](https://github.com/TxSadhu/DomFu/wiki/Using-the-python-module))
 
 ```python
 import DomFu as df

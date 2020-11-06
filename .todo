@@ -29,3 +29,8 @@ Minor(1.2.3):
 - Stores API keys on SQLite DB.
 - Added Chaos support with API.
 - Added Shodan support with API.
+
+Minor(1.2.4):
+- Fixed SQLite problems.
+- Optimized code to be less error prone.
+- 
