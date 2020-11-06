@@ -5,14 +5,15 @@ See the LICENSE.txt file for copying permission.
 '''
 
 import click
+from pathlib import Path
 import requests
+import os
 import time
 import socket
 import sqlite3 as lite
 from threading import *
 import queue
 from yaspin import yaspin, Spinner
-from fake_useragent import UserAgent
 from DomFu import fetchCrtSh, fetchBufferOverRun, fetchHackerTarget, fetchThreatCrowd, fetchShodan, fetchChaos, fetchVirusTotal, Probe
 
 
@@ -45,16 +46,21 @@ def passive(domain, output, probe):
     sp = Spinner(["[\]", "[|]", "[/]", "[-]"], 200)
     torthere = True
 
+    home = str(Path.home())
+    direc = '{home}/.dfu'.format(home=home)
+
+    if not os.path.exists(direc):
+        os.makedirs(direc, exist_ok=True)
+
     if probe:
         with yaspin(sp, text="Checking if Tor is installed in your system"):
             try:
-                headers = {'User-Agent': UserAgent().random}
                 proxies = {
                     'http': 'socks5://127.0.0.1:9050',
                     'https': 'socks5://127.0.0.1:9050'
                 }
                 fetchURL = requests.get(
-                    'https://check.torproject.org/api/ip', headers=headers, proxies=proxies).json()
+                    'https://check.torproject.org/api/ip', proxies=proxies).json()
 
                 if fetchURL['IsTor'] == True:
                     torthere = True
@@ -81,16 +87,11 @@ def passive(domain, output, probe):
                 yaspin().fail(
                     "[Invalid!] Looks like your domain is offline or invalid")
 
-        with yaspin(sp, text="Connecting to DB..."):
-            try:
-                connection = lite.connect('domfu_api.db')
-                cur = connection.cursor()
-                yaspin().ok("[Done!] Connecting to DB...")
-            except:
-                yaspin().fail("[Error!] Connecting to DB...")
-
         with yaspin(sp, text="Fetching your API keys from DB"):
             try:
+                home = str(Path.home())
+                connection = lite.connect('{home}/.dfu/domfu.db'.format(home=home))
+                cur = connection.cursor()
                 cur.execute("SELECT * FROM apis")
                 api_klst = cur.fetchall()
                 apiDB = {}
@@ -259,9 +260,17 @@ def passive(domain, output, probe):
 @click.option('--update / --not-update', '-up / -nup', default=False, help="Update the existing keys")
 @click.option('--delete / --not-delete', '-del / -ndel', default=False, help="Delete the existing keys")
 def api(shodan, chaos, update, delete):
+
+    home = str(Path.home())
+    direc = '{home}/.dfu'.format(home=home)
+
+    if not os.path.exists(direc):
+        os.makedirs(direc, exist_ok=True)
+
     click.echo(version())
 
-    connection = lite.connect('domfu_api.db')
+    home = str(Path.home())
+    connection = lite.connect('{home}/.dfu/domfu.db'.format(home=home))
     cur = connection.cursor()
     cur.execute(
         "CREATE TABLE IF NOT EXISTS apis(name TEXT PRIMARY KEY, key TEXT)")
