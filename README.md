@@ -41,13 +41,21 @@ $ cd DomFu
 $ sudo python setup.py install
 ```
 
+## Post-Installation
+
+**Initiate the DB:**
+
+```bash
+$ domfu api
+```
+
 ## Update
 
 **Using pip:**
 
 ```bash
 $ sudo apt-get update -y
-$ sudo pip install DomFu==1.3.0
+$ sudo pip install DomFu==1.3.0 --upgrade
 ```
 
 **Manual Installation:**
