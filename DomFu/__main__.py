@@ -23,7 +23,7 @@ def version():
 ⣿⣿⣿⡇⠀⣿⣿⣿⡀⢠⣿⠀⢀⣿⣿⣿⣿⣷⠀⣿⣿⣿⡇⣿⣿⣿⣿⣆⣿⣿⣿⣿⣆⢸⣿⣿⡏⢾⣿⣿⣿⢸⣿⣿⣿⠀⢸⣿⣿⣿⠀⠀⠀⠀
 ⣿⣿⣿⡇⢀⣿⣿⣿⣷⣿⣿⣄⠀⠉⢻⣿⣿⣿⡇⣿⣿⣿⡟⠈⣿⣿⣿⣟⠈⣿⣿⣿⣇⢸⣿⣿⣿⣤⣭⣩⠉⢸⣿⣿⣿⠀⣸⣿⣿⣿⠀⠀⠀⠀
 ⣿⣿⣿⢿⣿⣿⣿⣿⠃⠹⣿⣿⣿⣿⣿⣿⣿⣿⠀⣿⣿⣿⡇⠀⣿⣿⣿⣇⠀⣿⣿⣿⡇⢸⣿⣿⣿⠀⠀⠀⠀⢸⣿⣿⣿⣿⢹⣿⣿⣿⠀⠀⠀⠀⠀
-⠻⠻⠛⠸⠻⠻⠛⠁⠀⠀⠈⠛⠻⠿⠿⠛⠉⠀⠀⠻⠻⠻⠃⠀⠻⠻⠻⠓⠀⠻⠻⠻⠃⠸⠻⠻⠻⠀⠀⠀⠀⠀⠛⠻⠻⠋⠸⠻⠻⠻⠀⠀v1.2.4
+⠻⠻⠛⠸⠻⠻⠛⠁⠀⠀⠈⠛⠻⠿⠿⠛⠉⠀⠀⠻⠻⠻⠃⠀⠻⠻⠻⠓⠀⠻⠻⠻⠃⠸⠻⠻⠻⠀⠀⠀⠀⠀⠛⠻⠻⠋⠸⠻⠻⠻⠀⠀v1.3.0
 by txsadhu⠀⠀⠀
 ------------------------------------------------------------⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
     ''')
@@ -48,6 +48,17 @@ def passive(domain, output, probe):
 
     home = str(Path.home())
     direc = '{home}/.dfu'.format(home=home)
+    # Fetching API keys from DB
+    connection = lite.connect('{home}/.dfu/domfu.db'.format(home=home))
+    cur = connection.cursor()
+    cur.execute("SELECT * FROM apis")
+    api_klst = cur.fetchall()
+    apiDB = {}
+
+    for api in api_klst:
+        apiDB[api[0]] = api[1]
+
+    connection.close()
 
     if not os.path.exists(direc):
         os.makedirs(direc, exist_ok=True)
@@ -87,32 +98,15 @@ def passive(domain, output, probe):
                 yaspin().fail(
                     "[Invalid!] Looks like your domain is offline or invalid")
 
-        with yaspin(sp, text="Fetching your API keys from DB"):
-            try:
-                home = str(Path.home())
-                connection = lite.connect('{home}/.dfu/domfu.db'.format(home=home))
-                cur = connection.cursor()
-                cur.execute("SELECT * FROM apis")
-                api_klst = cur.fetchall()
-                apiDB = {}
-
-                for api in api_klst:
-                    apiDB[api[0]] = api[1]
-
-                connection.close()
-                yaspin().ok("[Done!] Fetching your API keys from DB...")
-            except:
-                yaspin().ok("[Done!] No API keys found on your DB")
-
         subdomain = []
 
         with yaspin(sp, text="Running API pre-processor"):
-            if 'shodan' in apiDB:
+            if "shodan" in apiDB:
                 apiDB_shodan = apiDB['shodan']
             else:
                 apiDB_shodan = None
 
-            if 'chaos' in apiDB:
+            if "chaos" in apiDB:
                 apiDB_chaos = apiDB['chaos']
             else:
                 apiDB_chaos = None
