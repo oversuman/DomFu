@@ -4,6 +4,7 @@ Copyright (C) 2020, DomFu Contributors.
 See the LICENSE.txt file for copying permission.
 '''
 
+from os import EX_PROTOCOL
 import requests
 
 
@@ -16,20 +17,24 @@ def fetchChaos(domain, api):
     Input  : fetchChaos("tropyl.com")
     Output : ['tropyl.com', 'www.tropyl.com']
     '''
-    subdomains = []
+    try:
+        subdomains = []
 
-    headers = {'Authorization': api}
+        headers = {'Authorization': api}
 
-    fetchURL = requests.get(
-        "https://dns.projectdiscovery.io/dns/{d}/subdomains".format(d=domain), headers=headers)
+        fetchURL = requests.get(
+            "https://dns.projectdiscovery.io/dns/{d}/subdomains".format(d=domain), headers=headers)
 
-    jsonResponse = fetchURL.json()
-    subdomainlst = jsonResponse['subdomains']
+        jsonResponse = fetchURL.json()
+        subdomainlst = jsonResponse['subdomains']
 
-    if subdomainlst != None:
-        for dom in subdomainlst:
-            dom_new = dom + '.' + domain
-            subdomains.append(dom_new)
+        if subdomainlst != None:
+            for dom in subdomainlst:
+                dom_new = dom + '.' + domain
+                subdomains.append(dom_new)
 
-    if subdomains != None:
-        return(subdomains)
+        if subdomains != None:
+            return(subdomains)
+    except:
+        pass
+

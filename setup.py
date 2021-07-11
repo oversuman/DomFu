@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='DomFu',
-    version='1.2.4',
+    version='1.2.5',
     author='Suman Basuli',
     author_email='thinisadhu@gmail.com',
     packages=find_packages(),

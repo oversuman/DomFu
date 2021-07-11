@@ -16,18 +16,21 @@ def fetchShodan(domain, api):
     Input  : fetchShodan("tropyl.com")
     Output : ['tropyl.com', 'www.tropyl.com']
     '''
-    subdomains = []
+    try:
+        subdomains = []
 
-    fetchURL = requests.get(
-        'https://api.shodan.io/dns/domain/' + domain + '?key=' + api)
+        fetchURL = requests.get(
+            'https://api.shodan.io/dns/domain/' + domain + '?key=' + api)
 
-    jsonResponse = fetchURL.json()
-    subdomainlst = jsonResponse['subdomains']
+        jsonResponse = fetchURL.json()
+        subdomainlst = jsonResponse['subdomains']
 
-    if subdomainlst != None:
-        for dom in subdomainlst:
-            dom_new = dom + '.' + domain
-            subdomains.append(dom_new)
+        if subdomainlst != None:
+            for dom in subdomainlst:
+                dom_new = dom + '.' + domain
+                subdomains.append(dom_new)
 
-    if subdomains != None:
-        return(subdomains)
+        if subdomains != None:
+            return(subdomains)
+    except:
+        pass

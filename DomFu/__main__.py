@@ -102,9 +102,20 @@ def passive(domain, output, probe):
                 connection.close()
                 yaspin().ok("[Done!] Fetching your API keys from DB...")
             except:
-                yaspin().fail("[Error!] Fetching your API keys from DB...")
+                yaspin().ok("[Done!] No API keys found on your DB")
 
         subdomain = []
+
+        with yaspin(sp, text="Running API pre-processor"):
+            if 'shodan' in apiDB:
+                apiDB_shodan = apiDB['shodan']
+            else:
+                apiDB_shodan = None
+
+            if 'chaos' in apiDB:
+                apiDB_chaos = apiDB['chaos']
+            else:
+                apiDB_chaos = None
 
         if dom_valid:
             timenow_start = time.perf_counter()
@@ -135,10 +146,10 @@ def passive(domain, output, probe):
                     fetchVirusTotal(arg5)), args=(que5, domain))
 
                 shodan_thread = Thread(target=lambda q, arg6, arg7: q.put(
-                    fetchShodan(arg6, arg7)), args=(que6, domain, apiDB['shodan']))
+                    fetchShodan(arg6, arg7)), args=(que6, domain, apiDB_shodan))
 
                 chaos_thread = Thread(target=lambda q, arg8, arg9: q.put(
-                    fetchChaos(arg8, arg9)), args=(que7, domain, apiDB['chaos']))
+                    fetchChaos(arg8, arg9)), args=(que7, domain, apiDB_chaos))
 
                 # INIT: Don't try to loop this threads, it slows down the process --->
                 crt_thread.start()
@@ -316,7 +327,7 @@ def api(shodan, chaos, update, delete):
         if delete:
             try:
                 name = 'chaos'
-                cur.execute("DELETE FROM apis WHERE id = (?)", (name,))
+                cur.execute("DELETE FROM apis WHERE name = (?)", (name,))
                 connection.commit()
                 print('[Done!] Deleted the value in DB')
                 print('')
@@ -361,20 +372,20 @@ def api(shodan, chaos, update, delete):
 
     if 'shodan' in av_api:
         sho_key = "available"
-        sym = '+'
+        sho_sym = '+'
     else:
         sho_key = "not available"
-        sym = '-'
+        sho_sym = '-'
 
     if 'chaos' in av_api:
         chaos_key = "available"
-        sym = '+'
+        chaos_sym = '+'
     else:
         chaos_key = "not available"
-        sym = '-'
+        chaos_sym = '-'
 
-    print(f"[{sym}] Sodan API key: {sho_key}")
-    print(f"[{sym}] Chaos API key: {chaos_key}")
+    print(f"[{sho_sym}] Sodan API key: {sho_key}")
+    print(f"[{chaos_sym}] Chaos API key: {chaos_key}")
     print('')
     print('-'*60)
     print('')
