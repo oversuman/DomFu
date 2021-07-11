@@ -15,7 +15,7 @@
   <a href="https://github.com/TxSadhu/DomFu/blob/master/LICENSE.txt">
     <img src="https://img.shields.io/badge/License-GPLv3-orange.svg">
   </a> 
-  <a href="https://github.com/TxSadhu/DomFu/releases/tag/v1.2.4/">
+  <a href="https://github.com/TxSadhu/DomFu/releases/tag/v1.2.5/">
     <img src="https://img.shields.io/badge/Release-Stable-green.svg">
   </a>
 </p>
@@ -47,7 +47,7 @@ $ sudo python setup.py install
 
 ```bash
 $ sudo apt-get update -y
-$ sudo pip install DomFu==1.2.4
+$ sudo pip install DomFu==1.2.5
 ```
 
 **Manual Installation:**
