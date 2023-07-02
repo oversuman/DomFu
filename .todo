@@ -3,9 +3,6 @@
 - Add UrlScan.io support with API. [https://urlscan.io/about-api/]
 - Add binaryedge.io support with API.
   
-- Add Webarchive Support https://github.com/guelfoweb/knock/blob/master/knockpy/remote/webarchive.py
-- Add RapidDNS support https://github.com/guelfoweb/knock/blob/master/knockpy/remote/rapiddns.py
-  
 - Add DNS permutation Support
 
 -------------------------------------------------------------------
