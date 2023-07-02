@@ -7,7 +7,7 @@
     <img src="https://img.shields.io/badge/Python-3.8-green.svg">
   </a>
   <a href="https://github.com/txsadhu/domfu/releases">
-    <img src="https://img.shields.io/badge/DomFu-v1.4-violet.svg">
+    <img src="https://img.shields.io/badge/DomFu-v1.4.1-violet.svg">
   </a>
   <a href="https://github.com/txsadhu/domfu/">
       <img src="https://img.shields.io/badge/Tested%20on-Linux-yellow.svg">
@@ -55,7 +55,7 @@ $ domfu api
 
 ```bash
 $ sudo apt-get update -y
-$ sudo pip install DomFu==1.4 --upgrade
+$ sudo pip install DomFu==1.4.1 --upgrade
 ```
 
 **Manual Installation:**
