@@ -14,18 +14,14 @@ import sqlite3 as lite
 from threading import *
 import queue
 from yaspin import yaspin, Spinner
-from DomFu import fetchCrtSh, fetchBufferOverRun, fetchHackerTarget, fetchThreatCrowd, fetchShodan, fetchChaos, fetchVirusTotal, Probe
+from DomFu import fetchCrtSh, fetchShodan, fetchChaos, fetchAlienv, fetchCertSpot, fetchVirusTotal, fetchWebArchive, Probe
 
 
 def version():
-    return('''
-⣤⣤⣤⡤⣤⣤⣀⠀⠀⠀⠀⣀⢤⣴⣴⣤⣀⠀⠀⣤⣤⣤⡄⢀⣤⣤⣀⠀⢀⣤⣤⣀⠀⢠⣤⣤⣤⠤⣤⣤⣤⢠⣤⣤⣤⠀⢠⣤⣤⣤⠀⠀⠀⠀
-⣿⣿⣿⡇⠀⣿⣿⣿⡀⢠⣿⠀⢀⣿⣿⣿⣿⣷⠀⣿⣿⣿⡇⣿⣿⣿⣿⣆⣿⣿⣿⣿⣆⢸⣿⣿⡏⢾⣿⣿⣿⢸⣿⣿⣿⠀⢸⣿⣿⣿⠀⠀⠀⠀
-⣿⣿⣿⡇⢀⣿⣿⣿⣷⣿⣿⣄⠀⠉⢻⣿⣿⣿⡇⣿⣿⣿⡟⠈⣿⣿⣿⣟⠈⣿⣿⣿⣇⢸⣿⣿⣿⣤⣭⣩⠉⢸⣿⣿⣿⠀⣸⣿⣿⣿⠀⠀⠀⠀
-⣿⣿⣿⢿⣿⣿⣿⣿⠃⠹⣿⣿⣿⣿⣿⣿⣿⣿⠀⣿⣿⣿⡇⠀⣿⣿⣿⣇⠀⣿⣿⣿⡇⢸⣿⣿⣿⠀⠀⠀⠀⢸⣿⣿⣿⣿⢹⣿⣿⣿⠀⠀⠀⠀⠀
-⠻⠻⠛⠸⠻⠻⠛⠁⠀⠀⠈⠛⠻⠿⠿⠛⠉⠀⠀⠻⠻⠻⠃⠀⠻⠻⠻⠓⠀⠻⠻⠻⠃⠸⠻⠻⠻⠀⠀⠀⠀⠀⠛⠻⠻⠋⠸⠻⠻⠻⠀⠀v1.3.0
-by txsadhu⠀⠀⠀
-------------------------------------------------------------⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    return ('''
+------------------------------------------------------------
+DomFu v1.4 by TxSadhu
+------------------------------------------------------------
     ''')
 
 
@@ -110,6 +106,11 @@ def passive(domain, output, probe):
                 apiDB_chaos = apiDB['chaos']
             else:
                 apiDB_chaos = None
+                
+            if "virustotal" in apiDB:
+                apiDB_vt = apiDB['virustotal']
+            else:
+                apiDB_vt = None
 
         if dom_valid:
             timenow_start = time.perf_counter()
@@ -127,45 +128,45 @@ def passive(domain, output, probe):
                 crt_thread = Thread(target=lambda q, arg1: q.put(
                     fetchCrtSh(arg1)), args=(que1, domain))
 
-                bufferoverrun_thread = Thread(target=lambda q, arg2: q.put(
-                    fetchBufferOverRun(arg2)), args=(que2, domain))
+                alienvault_thread = Thread(target=lambda q, arg2: q.put(
+                    fetchAlienv(arg2)), args=(que2, domain))
 
-                hackertarget_thread = Thread(target=lambda q, arg3: q.put(
-                    fetchHackerTarget(arg3)), args=(que3, domain))
+                certspot_thread = Thread(target=lambda q, arg3: q.put(
+                    fetchCertSpot(arg3)), args=(que3, domain))
 
-                threatcrowd_thread = Thread(target=lambda q, arg4: q.put(
-                    fetchThreatCrowd(arg4)), args=(que4, domain))
+                webarchive_thread = Thread(target=lambda q, arg4: q.put(
+                    fetchWebArchive(arg4)), args=(que4, domain))
 
-                vt_thread = Thread(target=lambda q, arg5: q.put(
-                    fetchVirusTotal(arg5)), args=(que5, domain))
+                vt_thread = Thread(target=lambda q, arg5, arg51: q.put(
+                    fetchVirusTotal(arg5, arg51)), args=(que5, domain, apiDB_vt))
 
-                shodan_thread = Thread(target=lambda q, arg6, arg7: q.put(
-                    fetchShodan(arg6, arg7)), args=(que6, domain, apiDB_shodan))
+                shodan_thread = Thread(target=lambda q, arg6, arg61: q.put(
+                    fetchShodan(arg6, arg61)), args=(que6, domain, apiDB_shodan))
 
-                chaos_thread = Thread(target=lambda q, arg8, arg9: q.put(
-                    fetchChaos(arg8, arg9)), args=(que7, domain, apiDB_chaos))
+                chaos_thread = Thread(target=lambda q, arg7, arg71: q.put(
+                    fetchChaos(arg7, arg71)), args=(que7, domain, apiDB_chaos))
 
                 # INIT: Don't try to loop this threads, it slows down the process --->
                 crt_thread.start()
-                bufferoverrun_thread.start()
-                hackertarget_thread.start()
-                threatcrowd_thread.start()
+                alienvault_thread.start()
+                certspot_thread.start()
+                webarchive_thread.start()
                 vt_thread.start()
                 shodan_thread.start()
                 chaos_thread.start()
 
                 crt_thread.join()
-                bufferoverrun_thread.join()
-                hackertarget_thread.join()
-                threatcrowd_thread.join()
+                alienvault_thread.join()
+                certspot_thread.join()
+                webarchive_thread.join()
                 vt_thread.join()
                 shodan_thread.join()
                 chaos_thread.join()
 
                 rcrt_thread = que1.get()
-                rbufferoverrun_thread = que2.get()
-                rhackertarget_thread = que3.get()
-                rthreatcrowd_thread = que4.get()
+                ralienvault_thread = que2.get()
+                rcertspot_thread = que3.get()
+                rwebarchive_thread = que4.get()
                 rvt_thread = que5.get()
                 rshodan_thread = que6.get()
                 rchaos_thread = que7.get()
@@ -180,17 +181,17 @@ def passive(domain, output, probe):
                     pass
 
                 try:
-                    subdomain.extend(rbufferoverrun_thread)
+                    subdomain.extend(ralienvault_thread)
                 except:
                     pass
 
                 try:
-                    subdomain.extend(rhackertarget_thread)
+                    subdomain.extend(rcertspot_thread)
                 except:
                     pass
 
                 try:
-                    subdomain.extend(rthreatcrowd_thread)
+                    subdomain.extend(rwebarchive_thread)
                 except:
                     pass
 
@@ -262,9 +263,10 @@ def passive(domain, output, probe):
 @domfucli.command()
 @click.option('--shodan', help="Add Shodan API Key")
 @click.option('--chaos', help="Add Chaos API key")
+@click.option('--virustotal', '-vt', help="Add VirusTotal API Key")
 @click.option('--update / --not-update', '-up / -nup', default=False, help="Update the existing keys")
 @click.option('--delete / --not-delete', '-del / -ndel', default=False, help="Delete the existing keys")
-def api(shodan, chaos, update, delete):
+def api(shodan, chaos, virustotal, update, delete):
 
     home = str(Path.home())
     direc = '{home}/.dfu'.format(home=home)
@@ -354,6 +356,43 @@ def api(shodan, chaos, update, delete):
                 print('[x] Value already exists in DB')
                 print('')
 
+    if virustotal:
+        if delete:
+            try:
+                name = 'virustotal'
+                cur.execute("DELETE FROM apis WHERE name = (?)", (name,))
+                connection.commit()
+                print('[Done!] Deleted the value in DB')
+                print('')
+            except:
+                print('[X] Failed to delete')
+                print('')
+
+        elif update:
+            try:
+                name = 'virustotal'
+                api_key = shodan
+                cur.execute(
+                    "UPDATE apis SET key = (?) WHERE name = (?)", (api_key, name))
+                connection.commit()
+                print('[Done!] Updated the value in DB')
+                print('')
+            except:
+                print('[x] Failed to Update')
+                print('')
+
+        else:
+            try:
+                name = 'virustotal'
+                api_key = shodan
+                cur.execute("INSERT INTO apis VALUES (?, ?)", (name, api_key))
+                connection.commit()
+                print('[Done!] Added your api key in DB')
+                print('')
+            except:
+                print('[x] Value already exists in DB')
+                print('')
+
     cur.execute("SELECT name FROM apis")
     api_res = cur.fetchall()
 
@@ -377,9 +416,17 @@ def api(shodan, chaos, update, delete):
     else:
         chaos_key = "not available"
         chaos_sym = '-'
+        
+    if 'virustotal' in av_api:
+        vt_key = "available"
+        vt_sym = '+'
+    else:
+        vt_key = "not available"
+        vt_sym = '-'
 
     print(f"[{sho_sym}] Sodan API key: {sho_key}")
     print(f"[{chaos_sym}] Chaos API key: {chaos_key}")
+    print(f"[{vt_sym}] VirusTotal API key: {vt_key}")
     print('')
     print('-'*60)
     print('')

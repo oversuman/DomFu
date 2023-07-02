@@ -2,7 +2,7 @@
 '''
 list -> list
 
-This Prober cehcks if a domain is working or not.
+This Prober checks if a domain is working or not.
 
 Input: ['tropyl.com', 'www.tropyl.com', 'fake.tropyl.com']
 Output: ['tropyl.com', 'www.tropyl.com']
@@ -35,7 +35,7 @@ def Probe(subdomainList):
     for job in jobs:
         job.join()
 
-    return(subdomain)
+    return (subdomain)
 
 
 def probe_test(domain):
@@ -49,7 +49,7 @@ def probe_test(domain):
 
         if http_res.status_code == 200 or http_res.status_code == 301 or http_res.status_code == 302:
             subdomain.append(domain)
-            return(None)
+            return (None)
 
         # Https ---->
         https_url = 'https://' + '{d}'.format(d=domain)
@@ -58,9 +58,9 @@ def probe_test(domain):
 
         if https_res.status_code == 200 or https_res.status_code == 301 or https_res.status_code == 302:
             subdomain.append(domain)
-            return(None)
+            return (None)
 
     except:
         pass
 
-    return(None)
+    return (None)

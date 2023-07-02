@@ -28,4 +28,4 @@ def fetchCrtSh(domain):
 
         subdomains = sorted(set(subdomains))
 
-        return(subdomains)
+        return (subdomains)
