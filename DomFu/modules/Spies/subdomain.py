@@ -13,7 +13,7 @@ from .VirusTotal import fetchVirusTotal
 from .shodan import fetchShodan
 from .chaos import fetchChaos
 from .certspot import fetchCertSpot
-from .alienVault import fetchAlienv
+from .alienvault import fetchAlienv
 from .webarchive import fetchWebArchive
 
 
